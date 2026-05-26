@@ -6,6 +6,12 @@
   <title>AURELIUS — Fine Dining</title>
   <script src="https://cdn.tailwindcss.com">
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js">
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@400;600;700&family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
   <style>
@@ -773,10 +779,10 @@
     /* ========== AUTO-SCROLL QUOTES ========== */
     @keyframes scrollQuotes {
       0% {
-        transform: translateX(-50%);
+        transform: translateX(0);
       }
       100% {
-        transform: translateX(0);
+        transform: translateX(-50%);
       }
     }
     .quotes-track {
@@ -793,6 +799,25 @@
       flex-shrink: 0;
     }
 
+    /* ========== SIGNATURES HORIZONTAL SCROLL ========== */
+    .signatures-track {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 6px;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .signatures-track::-webkit-scrollbar {
+      display: none;
+    }
+    .signatures-track .horizontal-card {
+      width: 280px;
+      flex-shrink: 0;
+    }
     .testimonials-fade {
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
       mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
@@ -980,6 +1005,172 @@
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
       margin: 36px 0;
     }
+
+    /* ========== GSAP TEXT REVEAL ========== */
+    .text-reveal {
+      overflow: hidden;
+      display: inline-block;
+    }
+    .text-reveal-inner {
+      display: block;
+      will-change: transform, opacity;
+    }
+
+    /* ========== SIGNATURE CARDS ========== */
+    .horizontal-card {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .horizontal-card:hover {
+      border-color: rgba(201, 168, 98, 0.2);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    }
+    .horizontal-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .horizontal-card:hover img {
+      transform: scale(1.08);
+    }
+    .horizontal-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.7) 100%);
+      pointer-events: none;
+    }
+    .horizontal-card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 32px;
+      z-index: 2;
+    }
+    .horizontal-card-content .tag {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: rgba(201, 168, 98, 0.7);
+      margin-bottom: 6px;
+    }
+    .horizontal-card-content .dish-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .horizontal-card-content .dish-desc {
+      font-size: 0.8rem;
+      color: rgba(245, 239, 230, 0.4);
+      max-width: 280px;
+    }
+    .horizontal-card-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 3;
+      padding: 8px 16px;
+      background: rgba(201, 168, 98, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(201, 168, 98, 0.2);
+      border-radius: 50px;
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ========== NAV ACTIVE STATE ========== */
+    .nav-link {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 1.5px;
+      background: var(--gold);
+      transform: translateX(-50%);
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-link.active {
+      color: var(--gold) !important;
+    }
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    /* ========== COUNTER ========== */
+    .counter-number {
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ========== MAGNETIC BUTTON WRAPPER ========== */
+    .magnetic-wrap {
+      display: inline-block;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ========== SCROLL PROGRESS BAR ========== */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      z-index: 99999;
+      pointer-events: none;
+      transition: width 0.1s linear;
+    }
+
+    /* ========== ENHANCED GLOW ON ACTIVE SECTIONS ========== */
+    .section-glow {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    /* ========== REDUCED MOTION ========== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .mouse-follower { display: none !important; }
+      .hero-img-rotate { animation: none !important; }
+      .quotes-track { animation: none !important; }
+      .signatures-track { animation: none !important; }
+      .scroll-progress { display: none !important; }
+      .particle { display: none !important; }
+    }
+
+    @media (max-width: 768px) {
+      .horizontal-card-content .dish-name {
+        font-size: 1.2rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -992,6 +1183,9 @@
   <!-- ===== GRAIN OVERLAY ===== -->
   <div class="grain-overlay"></div>
 
+  <!-- ===== SCROLL PROGRESS ===== -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <!-- ===== MOUSE FOLLOWER ===== -->
   <div class="mouse-follower" id="mouseFollower"></div>
 
@@ -1000,12 +1194,12 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <a href="#" class="font-script text-2xl md:text-3xl text-cream-soft hover:text-gold transition-colors" style="color: var(--gold);">Aurelius</a>
       <div class="hidden md:flex items-center gap-10">
-        <a href="#story" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Story</a>
-        <a href="#menu" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Menu</a>
-        <a href="#testimonials" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Press</a>
-        <a href="#showcase" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Gallery</a>
-        <a href="#awards" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Awards</a>
-        <a href="#reservation" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Contact</a>
+        <a href="#story" class="nav-link text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;" data-section="story">Story</a>
+        <a href="#menu" class="nav-link text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;" data-section="menu">Menu</a>
+        <a href="#testimonials" class="nav-link text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;" data-section="testimonials">Press</a>
+        <a href="#signatures" class="nav-link text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;" data-section="signatures">Signatures</a>
+        <a href="#awards" class="nav-link text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;" data-section="awards">Awards</a>
+        <a href="#reservation" class="nav-link text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;" data-section="reservation">Contact</a>
       </div>
       <button class="md:hidden text-cream p-2" id="menuToggle" aria-label="Menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -1020,7 +1214,7 @@
     <a href="#story" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Story</a>
     <a href="#menu" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Menu</a>
     <a href="#testimonials" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Press</a>
-    <a href="#showcase" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Gallery</a>
+    <a href="#signatures" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Signatures</a>
     <a href="#awards" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Awards</a>
     <a href="#reservation" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Contact</a>
   </div>
@@ -1038,26 +1232,24 @@
 
         <!-- LEFT: Text Content -->
         <div class="flex-1 md:pr-4 lg:pr-8">
-          <div class="reveal" style="transition-delay: 0.1s;">
-            <div style="height: 28px;"></div>
-          </div>
-          <div class="reveal" style="transition-delay: 0.2s;">
-            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-2" style="color: var(--cream);">
+          <div style="height: 28px;"></div>
+          <div>
+            <h1 class="hero-text-line font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-2" style="color: var(--cream);">
               Savor the
             </h1>
-            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-2 italic" style="color: var(--gold);">
+            <h1 class="hero-text-line font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-2 italic" style="color: var(--gold);">
               Art
             </h1>
-            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-6" style="color: var(--cream);">
+            <h1 class="hero-text-line font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-6" style="color: var(--cream);">
               of Dining
             </h1>
           </div>
-          <div class="reveal" style="transition-delay: 0.3s;">
+          <div class="hero-description">
             <p class="text-base md:text-lg text-cream-soft/60 max-w-md mb-10 leading-relaxed font-light" style="color: rgba(245, 239, 230, 0.55);">
               An intimate journey through refined flavors, where tradition meets innovation. Every plate tells a story of passion and craftsmanship.
             </p>
           </div>
-          <div class="reveal flex flex-wrap items-center gap-4 md:gap-6" style="transition-delay: 0.35s;">
+          <div class="hero-buttons flex flex-wrap items-center gap-4 md:gap-6">
             <button class="btn-primary">
               <span>Reserve a Table</span>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1073,7 +1265,7 @@
           </div>
 
           <!-- Chef Profile -->
-          <div class="reveal mt-12 md:mt-16 flex items-center gap-4" style="transition-delay: 0.4s;">
+          <div class="chef-profile mt-12 md:mt-16 flex items-center gap-4">
             <div class="relative" style="width: 48px; height: 48px;">
               <div class="chef-avatar">
                 <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=100&h=100&fit=crop&crop=face&q=80" alt="Chef" loading="lazy">
@@ -1113,7 +1305,7 @@
 
             <!-- Rotating image only -->
             <div class="hero-img-rotate">
-              <img src="hero-img.png" alt="Gourmet dish" class="hero-food-img">
+              <img src="food-plate.png" alt="Gourmet dish" class="hero-food-img">
             </div>
           </div>
         </div>
@@ -1463,136 +1655,121 @@
   </section>
 
   <!-- ============================================================ -->
-  <!-- FOOD SHOWCASE SECTION -->
+  <!-- SIGNATURE CREATIONS - AUTO-SCROLLING TRACK -->
   <!-- ============================================================ -->
-  <section id="showcase" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 80% 50% at 50% 30%, #0a3325 0%, #0a1a14 50%, #070707 100%); scroll-margin-top: 40px;">
+  <section id="signatures" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 80% 50% at 50% 30%, #0a3325 0%, #0a1a14 50%, #070707 100%);">
     <div class="light-spot" style="width: 400px; height: 400px; top: 10%; left: -10%; background: radial-gradient(circle, rgba(201,168,98,0.06), transparent);"></div>
     <div class="light-spot" style="width: 350px; height: 350px; bottom: 5%; right: -5%; background: radial-gradient(circle, rgba(201,168,98,0.05), transparent);"></div>
 
     <div class="relative z-10 max-w-7xl mx-auto">
       <!-- Section header -->
       <div class="text-center mb-16 md:mb-20 reveal">
-        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">From Our Kitchen</p>
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">Art on a Plate</p>
         <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
-          Signature <span style="color: var(--gold);">Plates</span>
+          Signature <span style="color: var(--gold);">Creations</span>
         </h2>
         <div class="deco-line-center mx-auto mt-5"></div>
       </div>
 
-      <!-- Auto-scrolling showcase track with fade edges -->
-      <div class="showcase-fade overflow-hidden reveal">
-        <div class="showcase-track">
+      <!-- Auto-scrolling track (opposite direction from testimonials) -->
+      <div class="testimonials-fade overflow-hidden reveal">
+        <div class="signatures-track">
 
           <!-- 1 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&h=600&fit=crop&auto=format&q=80" alt="Truffle Pappardelle" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Handmade</div>
-              <div class="title">Truffle Pappardelle</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&h=900&fit=crop&auto=format&q=80" alt="Truffle Pappardelle" loading="lazy">
+            <div class="horizontal-card-badge">Handmade</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Truffle Pappardelle</div>
+              <div class="dish-desc">Wild mushrooms, aged parmesan, fresh thyme</div>
             </div>
           </div>
 
           <!-- 2 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop&auto=format&q=80" alt="Herb-Crusted Lamb" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Grilled</div>
-              <div class="title">Herb-Crusted Lamb</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=900&fit=crop&auto=format&q=80" alt="Herb-Crusted Lamb" loading="lazy">
+            <div class="horizontal-card-badge">Grilled</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Herb-Crusted Lamb</div>
+              <div class="dish-desc">Rosemary, garlic confit, red wine jus</div>
             </div>
           </div>
 
           <!-- 3 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&h=600&fit=crop&auto=format&q=80" alt="Steak" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Prime Cut</div>
-              <div class="title">Wagyu Tomahawk</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=900&fit=crop&auto=format&q=80" alt="Wagyu Tomahawk" loading="lazy">
+            <div class="horizontal-card-badge">Prime Cut</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Wagyu Tomahawk</div>
+              <div class="dish-desc">Herb crust, roasted root vegetables</div>
             </div>
           </div>
 
           <!-- 4 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop&auto=format&q=80" alt="Pizza" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Wood-Fired</div>
-              <div class="title">Truffle Pizza</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&h=900&fit=crop&auto=format&q=80" alt="Butter-Poached Lobster" loading="lazy">
+            <div class="horizontal-card-badge">Ocean Fresh</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Butter-Poached Lobster</div>
+              <div class="dish-desc">Vanilla beurre blanc, sea asparagus</div>
             </div>
           </div>
 
           <!-- 5 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=600&fit=crop&auto=format&q=80" alt="Salad" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Seasonal</div>
-              <div class="title">Garden Harvest</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800&h=900&fit=crop&auto=format&q=80" alt="Black Truffle Risotto" loading="lazy">
+            <div class="horizontal-card-badge">Creamy</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Black Truffle Risotto</div>
+              <div class="dish-desc">Carnaroli, aged parmesan, Perigord truffle</div>
             </div>
           </div>
 
           <!-- 6 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=600&h=600&fit=crop&auto=format&q=80" alt="Risotto" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Creamy</div>
-              <div class="title">Black Truffle Risotto</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=800&h=900&fit=crop&auto=format&q=80" alt="Valrhona Chocolate" loading="lazy">
+            <div class="horizontal-card-badge">Decadent</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Valrhona Chocolate</div>
+              <div class="dish-desc">Dark ganache, sea salt, olive oil</div>
             </div>
           </div>
 
           <!-- 7 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=600&fit=crop&auto=format&q=80" alt="Lobster" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Ocean Fresh</div>
-              <div class="title">Butter-Poached Lobster</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=900&fit=crop&auto=format&q=80" alt="Truffle Pizza" loading="lazy">
+            <div class="horizontal-card-badge">Wood-Fired</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Truffle Pizza</div>
+              <div class="dish-desc">Mushroom duxelles, fontina, arugula</div>
             </div>
           </div>
 
-          <!-- 8 -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=600&h=600&fit=crop&auto=format&q=80" alt="Dessert" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Decadent</div>
-              <div class="title">Valrhona Chocolate</div>
-            </div>
-          </div>
-
-          <!-- === duplicate set for seamless loop === -->
+          <!-- === duplicate for seamless loop === -->
           <!-- 1' -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&h=600&fit=crop&auto=format&q=80" alt="Truffle Pappardelle" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Handmade</div>
-              <div class="title">Truffle Pappardelle</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&h=900&fit=crop&auto=format&q=80" alt="Truffle Pappardelle" loading="lazy">
+            <div class="horizontal-card-badge">Handmade</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Truffle Pappardelle</div>
+              <div class="dish-desc">Wild mushrooms, aged parmesan, fresh thyme</div>
             </div>
           </div>
 
           <!-- 2' -->
-          <div class="showcase-card">
-            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop&auto=format&q=80" alt="Herb-Crusted Lamb" loading="lazy">
-            <div class="card-label">
-              <div class="tag">Grilled</div>
-              <div class="title">Herb-Crusted Lamb</div>
+          <div class="horizontal-card">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=900&fit=crop&auto=format&q=80" alt="Herb-Crusted Lamb" loading="lazy">
+            <div class="horizontal-card-badge">Grilled</div>
+            <div class="horizontal-card-content">
+              <div class="dish-name">Herb-Crusted Lamb</div>
+              <div class="dish-desc">Rosemary, garlic confit, red wine jus</div>
             </div>
           </div>
 
         </div>
-      </div>
-
-      <!-- Bottom description -->
-      <div class="text-center mt-14 md:mt-20 reveal">
-        <p class="font-garamond text-lg md:text-xl italic max-w-2xl mx-auto" style="color: rgba(245, 239, 230, 0.35);">
-          "Cooking is an art, but eating is a feeling — we craft each plate to stir the soul."
-        </p>
-        <div class="mt-6 flex items-center justify-center gap-3 text-xs tracking-[3px] uppercase" style="color: rgba(201, 168, 98, 0.5);">
-          <span class="deco-line" style="width: 30px;"></span>
-          Chef Marco Bellini
-          <span class="deco-line" style="width: 30px;"></span>
         </div>
-      </div>
     </div>
   </section>
-
-  <!-- ============================================================ -->
-  <!-- AWARDS & RECOGNITION SECTION -->
   <!-- ============================================================ -->
   <section id="awards" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 85% 55% at 50% 30%, #0d3024 0%, #091a10 50%, #070707 100%); scroll-margin-top: 40px;">
     <div class="light-spot" style="width: 400px; height: 400px; top: 15%; left: -8%; background: radial-gradient(circle, rgba(201,168,98,0.06), transparent);"></div>
@@ -1824,7 +2001,7 @@
             <li><a href="#story" class="footer-link">Our Story</a></li>
             <li><a href="#menu" class="footer-link">Menu</a></li>
             <li><a href="#testimonials" class="footer-link">Press</a></li>
-            <li><a href="#showcase" class="footer-link">Gallery</a></li>
+            <li><a href="#signatures" class="footer-link">Signatures</a></li>
             <li><a href="#awards" class="footer-link">Awards</a></li>
           </ul>
         </div>
@@ -1872,7 +2049,16 @@
   <!-- JAVASCRIPT -->
   <!-- ============================================================ -->
   <script>
-    // ---- Page Loader ----
+    // ================================================================
+    // AURELIUS — GSAP ANIMATION ENGINE
+    // ================================================================
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ---- Utility: Custom spring easing ----
+    const spring = [0.16, 1, 0.3, 1];
+    const springBounce = [0.34, 1.56, 0.64, 1];
+
+    // ---- Page Loader (keep existing) ----
     window.addEventListener('load', function() {
       const loader = document.getElementById('pageLoader');
       if (loader) {
@@ -1882,10 +2068,361 @@
       }
     });
 
-    // ---- Mobile Menu ----
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    let menuOpen = false;
+    // ================================================================
+    // 1. HERO STAGGER ENTRANCE
+    // ================================================================
+    const heroTimeline = gsap.timeline({
+      delay: 0.6,
+      defaults: { duration: 1, ease: spring }
+    });
+
+    heroTimeline
+      .from('.hero-img-rotate', { scale: 0.6, opacity: 0, duration: 1.2 })
+      .from('.hero-text-line', { y: 60, opacity: 0, stagger: 0.1 }, '-=0.6')
+      .from('.hero-description', { y: 30, opacity: 0 }, '-=0.4')
+      .from('.hero-buttons', { y: 30, opacity: 0 }, '-=0.3')
+      .from('.chef-profile', { y: 20, opacity: 0 }, '-=0.2')
+      .from('.particle', { scale: 0, opacity: 0, stagger: 0.03 }, '-=0.4');
+
+    // ================================================================
+    // 2. TEXT REVEAL UTILITY
+    // ================================================================
+    function splitTextToSpans(selector) {
+      document.querySelectorAll(selector).forEach(function(el) {
+        var text = el.textContent.trim();
+        if (!text) return;
+        var wrapper = document.createElement('span');
+        wrapper.className = 'text-reveal';
+        var inner = document.createElement('span');
+        inner.className = 'text-reveal-inner';
+        inner.textContent = text;
+        wrapper.appendChild(inner);
+        el.textContent = '';
+        el.appendChild(wrapper);
+      });
+    }
+
+    // Apply to section headings split by <span>
+    document.querySelectorAll('.section-heading-text').forEach(function(el) {
+      el.childNodes.forEach(function(node) {
+        if (node.nodeType === 3 && node.textContent.trim()) {
+          var span = document.createElement('span');
+          span.className = 'text-reveal';
+          var inner = document.createElement('span');
+          inner.className = 'text-reveal-inner';
+          inner.textContent = node.textContent.trim();
+          span.appendChild(inner);
+          node.parentNode.replaceChild(span, node);
+        }
+      });
+    });
+
+    // ================================================================
+    // 3. SCROLL REVEAL SYSTEM (IN & OUT)
+    // ================================================================
+    var revealDefaults = { duration: 0.9, ease: spring };
+
+    // .reveal → fade up in & out
+    gsap.utils.toArray('.reveal').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, y: 40 }, {
+        opacity: 1, y: 0,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          end: 'top 40%',
+          toggleActions: 'play none none none'
+        },
+        ...revealDefaults
+      });
+    });
+
+    // .reveal-left → fade left in & out
+    gsap.utils.toArray('.reveal-left').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, x: -50 }, {
+        opacity: 1, x: 0,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          end: 'top 40%',
+          toggleActions: 'play none none none'
+        },
+        ...revealDefaults
+      });
+    });
+
+    // .reveal-right → fade right in & out
+    gsap.utils.toArray('.reveal-right').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, x: 50 }, {
+        opacity: 1, x: 0,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          end: 'top 40%',
+          toggleActions: 'play none none none'
+        },
+        ...revealDefaults
+      });
+    });
+
+    // .reveal-scale → scale in & out
+    gsap.utils.toArray('.reveal-scale').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, scale: 0.88 }, {
+        opacity: 1, scale: 1,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          end: 'top 40%',
+          toggleActions: 'play none none none'
+        },
+        ...revealDefaults
+      });
+    });
+
+    // ================================================================
+    // 4. STAGGERED MENU ITEMS
+    // ================================================================
+    gsap.utils.toArray('.menu-item').forEach(function(item, i) {
+      gsap.fromTo(item, { opacity: 0, x: -20 }, {
+        opacity: 1, x: 0,
+        duration: 0.6,
+        delay: i * 0.06,
+        ease: spring,
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 90%',
+          end: 'top 40%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // ================================================================
+    // 5. STAGGERED TESTIMONIAL CARDS
+    // ================================================================
+    gsap.utils.toArray('.testimonial-card').forEach(function(card, i) {
+      gsap.fromTo(card, { opacity: 0, y: 30, scale: 0.95 }, {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6,
+        delay: i * 0.04,
+        ease: spring,
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // ================================================================
+    // 6. STAGGERED AWARDS
+    // ================================================================
+    gsap.utils.toArray('.award-item').forEach(function(item, i) {
+      gsap.fromTo(item, { opacity: 0, y: 30 }, {
+        opacity: 1, y: 0,
+        duration: 0.6,
+        delay: i * 0.08,
+        ease: spring,
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 85%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    // ================================================================
+    // 8. STAT COUNTER ANIMATION
+    // ================================================================
+    function animateCounter(el, target) {
+      var obj = { val: 0 };
+      gsap.to(obj, {
+        val: target,
+        duration: 2,
+        ease: 'power2.out',
+        onUpdate: function() {
+          el.textContent = Math.floor(obj.val);
+        },
+        scrollTrigger: {
+          trigger: el.closest('.story-stat') || el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    }
+
+    // Handle numbers with K+ suffix
+    document.querySelectorAll('.story-stat .number').forEach(function(el) {
+      var text = el.textContent.trim();
+      var isK = text.indexOf('K') > -1;
+      var num = parseFloat(text) || 0;
+      if (isK) {
+        var obj = { val: 0 };
+        gsap.to(obj, {
+          val: num,
+          duration: 2,
+          ease: 'power2.out',
+          onUpdate: function() {
+            var v = Math.floor(obj.val);
+            el.textContent = v >= 1000 ? (v / 1000).toFixed(0) + 'K+' : v + '+';
+          },
+          scrollTrigger: {
+            trigger: el.closest('.story-stat'),
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
+        });
+      } else {
+        animateCounter(el, num);
+      }
+    });
+
+    // ================================================================
+    // 9. NAVBAR ACTIVE STATE (IntersectionObserver)
+    // ================================================================
+    var navLinks = document.querySelectorAll('.nav-link');
+    var sections = [];
+
+    navLinks.forEach(function(link) {
+      var sectionId = link.getAttribute('data-section');
+      var section = document.getElementById(sectionId);
+      if (section) {
+        sections.push({ id: sectionId, el: section, link: link });
+      }
+    });
+
+    var sectionObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.getAttribute('id');
+          navLinks.forEach(function(link) {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === id) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, {
+      threshold: 0.25,
+      rootMargin: '-80px 0px -20% 0px'
+    });
+
+    sections.forEach(function(s) {
+      sectionObserver.observe(s.el);
+    });
+
+    // ================================================================
+    // 10. NAVBAR SCROLL EFFECT (background)
+    // ================================================================
+    var nav = document.querySelector('nav');
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 100) {
+        nav.style.background = 'rgba(11, 11, 11, 0.75)';
+        nav.style.backdropFilter = 'blur(30px)';
+        nav.style.borderBottom = '1px solid rgba(255, 255, 255, 0.03)';
+      } else {
+        nav.style.background = 'transparent';
+        nav.style.backdropFilter = 'none';
+        nav.style.borderBottom = 'none';
+      }
+    });
+
+    // ================================================================
+    // 11. SCROLL PROGRESS BAR
+    // ================================================================
+    var progressBar = document.getElementById('scrollProgress');
+    if (progressBar) {
+      window.addEventListener('scroll', function() {
+        var scrollTop = window.pageYOffset;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = percent + '%';
+      });
+    }
+
+    // ================================================================
+    // 12. PARALLAX LIGHT SPOTS
+    // ================================================================
+    gsap.utils.toArray('.light-spot').forEach(function(spot) {
+      gsap.to(spot, {
+        y: function() { return Math.random() * 80 + 40; },
+        x: function() { return (Math.random() - 0.5) * 60; },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: spot.closest('section') || spot.parentElement,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5
+        }
+      });
+    });
+
+    // ================================================================
+    // 13. MAGNETIC BUTTONS
+    // ================================================================
+    document.querySelectorAll('.btn-primary, .btn-glass').forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var rect = btn.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(btn, {
+          x: x * 0.15,
+          y: y * 0.15,
+          duration: 0.4,
+          ease: 'power2.out'
+        });
+      });
+      btn.addEventListener('mouseleave', function() {
+        gsap.to(btn, {
+          x: 0,
+          y: 0,
+          duration: 0.6,
+          ease: spring
+        });
+      });
+    });
+
+    // ================================================================
+    // 14. MOUSE FOLLOWER (enhanced)
+    // ================================================================
+    var follower = document.getElementById('mouseFollower');
+
+    if (follower) {
+      var mouseX = 0,
+        mouseY = 0;
+      var followerX = 0,
+        followerY = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animateFollower() {
+        followerX += (mouseX - followerX) * 0.08;
+        followerY += (mouseY - followerY) * 0.08;
+        follower.style.transform = 'translate(' + followerX + 'px, ' + followerY + 'px) translate(-50%, -50%)';
+        requestAnimationFrame(animateFollower);
+      }
+
+      animateFollower();
+
+      document.querySelectorAll('a, button, .menu-item, .horizontal-card, .award-item, .testimonial-card').forEach(function(el) {
+        el.addEventListener('mouseenter', function() {
+          follower.classList.add('active');
+        });
+        el.addEventListener('mouseleave', function() {
+          follower.classList.remove('active');
+        });
+      });
+    }
+
+    // ================================================================
+    // 15. MOBILE MENU (keep existing)
+    // ================================================================
+    var menuToggle = document.getElementById('menuToggle');
+    var mobileMenu = document.getElementById('mobileMenu');
+    var menuOpen = false;
 
     if (menuToggle && mobileMenu) {
       menuToggle.addEventListener('click', function() {
@@ -1908,88 +2445,132 @@
       }
     }
 
-    // ---- Intersection Observer for Reveals ----
-    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-
-    const observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -60px 0px'
-    });
-
-    revealElements.forEach(function(el) {
-      observer.observe(el);
-    });
-
-    // ---- Mouse Follower ----
-    const follower = document.getElementById('mouseFollower');
-
-    if (follower) {
-      let mouseX = 0,
-        mouseY = 0;
-      let followerX = 0,
-        followerY = 0;
-
-      document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-
-      function animateFollower() {
-        followerX += (mouseX - followerX) * 0.08;
-        followerY += (mouseY - followerY) * 0.08;
-        follower.style.transform = 'translate(' + followerX + 'px, ' + followerY + 'px) translate(-50%, -50%)';
-        requestAnimationFrame(animateFollower);
-      }
-
-      animateFollower();
-
-      // Scale up on interactive elements
-      document.querySelectorAll('a, button, .menu-item, .showcase-card').forEach(function(el) {
-        el.addEventListener('mouseenter', function() {
-          follower.classList.add('active');
-        });
-        el.addEventListener('mouseleave', function() {
-          follower.classList.remove('active');
-        });
-      });
-    }
-
-    // ---- Navbar scroll effect ----
-    const nav = document.querySelector('nav');
-    let lastScroll = 0;
-
-    window.addEventListener('scroll', function() {
-      const currentScroll = window.pageYOffset;
-      if (currentScroll > 100) {
-        nav.style.background = 'rgba(11, 11, 11, 0.7)';
-        nav.style.backdropFilter = 'blur(30px)';
-        nav.style.borderBottom = '1px solid rgba(255, 255, 255, 0.03)';
-      } else {
-        nav.style.background = 'transparent';
-        nav.style.backdropFilter = 'none';
-        nav.style.borderBottom = 'none';
-      }
-      lastScroll = currentScroll;
-    });
-
-    // ---- Particles regeneration (subtle random movement) ----
-    const particles = document.querySelectorAll('.particle');
-    particles.forEach(function(p) {
-      const duration = parseFloat(p.style.animationDuration) || 8;
-      const delay = parseFloat(p.style.animationDelay) || 0;
-      // Slightly randomize
+    // ================================================================
+    // 16. PARTICLES (keep existing)
+    // ================================================================
+    document.querySelectorAll('.particle').forEach(function(p) {
+      var duration = parseFloat(p.style.animationDuration) || 8;
+      var delay = parseFloat(p.style.animationDelay) || 0;
       p.style.animationDuration = (duration + (Math.random() * 2 - 1)) + 's';
       p.style.animationDelay = (delay + Math.random()) + 's';
     });
 
+    // ================================================================
+    // 17. SIGNATURES — auto-scroll + drag (mouse + touch)
+    // ================================================================
+    {
+      var sigTrack = document.querySelector('.signatures-track');
+      if (sigTrack) {
+        var sigSpeed = 0.8;
+        var step = 304;
+        var sigTarget = null;
+        var isSigAuto = true;
+        var isSigDrag = false;
+        var dragStartX = 0;
+        var dragStartScroll = 0;
+        var snapTimer = null;
+        var resumeDelay = 2000;
+
+        function sigLoop() {
+          if (sigTarget !== null) {
+            var diff = sigTarget - sigTrack.scrollLeft;
+            if (Math.abs(diff) < 0.5) {
+              sigTrack.scrollLeft = sigTarget;
+              sigTarget = null;
+              clearTimeout(snapTimer);
+              snapTimer = setTimeout(function() { isSigAuto = true; }, resumeDelay);
+              resumeDelay = 2000;
+            } else {
+              sigTrack.scrollLeft += diff * 0.12;
+            }
+          } else if (isSigAuto) {
+            var maxScroll = sigTrack.scrollWidth - sigTrack.clientWidth;
+            sigTrack.scrollLeft += sigSpeed;
+            if (sigTrack.scrollLeft >= maxScroll) {
+              sigTrack.scrollLeft = 0;
+            }
+          }
+          requestAnimationFrame(sigLoop);
+        }
+
+        function snapNearest() {
+          var idx = Math.round(sigTrack.scrollLeft / step);
+          var max = sigTrack.scrollWidth - sigTrack.clientWidth;
+          sigTarget = Math.max(0, Math.min(max, idx * step));
+        }
+
+        // ---- mouse ----
+        sigTrack.addEventListener('mousedown', function(e) {
+          isSigDrag = true;
+          isSigAuto = false;
+          sigTarget = null;
+          sigTrack.style.cursor = 'grabbing';
+          dragStartX = e.clientX;
+          dragStartScroll = sigTrack.scrollLeft;
+          e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', function(e) {
+          if (!isSigDrag) return;
+          sigTrack.scrollLeft = dragStartScroll - (e.clientX - dragStartX);
+        });
+
+        document.addEventListener('mouseup', function() {
+          if (!isSigDrag) return;
+          isSigDrag = false;
+          sigTrack.style.cursor = 'grab';
+          snapNearest();
+        });
+
+        sigTrack.addEventListener('mouseleave', function() {
+          resumeDelay = 0;
+          if (isSigDrag) {
+            isSigDrag = false;
+            sigTrack.style.cursor = 'grab';
+            snapNearest();
+          }
+        });
+
+        // ---- touch ----
+        sigTrack.addEventListener('touchstart', function(e) {
+          isSigDrag = true;
+          isSigAuto = false;
+          sigTarget = null;
+          dragStartX = e.touches[0].clientX;
+          dragStartScroll = sigTrack.scrollLeft;
+        }, { passive: true });
+
+        sigTrack.addEventListener('touchmove', function(e) {
+          if (!isSigDrag) return;
+          sigTrack.scrollLeft = dragStartScroll - (e.touches[0].clientX - dragStartX);
+        }, { passive: true });
+
+        sigTrack.addEventListener('touchend', function() {
+          if (!isSigDrag) return;
+          isSigDrag = false;
+          snapNearest();
+        });
+
+        // ---- reduced-motion check ----
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          requestAnimationFrame(sigLoop);
+        }
+      }
+    }
+
+    // ================================================================
+    // 18. REFRESH ScrollTrigger on load for accurate measurements
+    // ================================================================
+    window.addEventListener('load', function() {
+      ScrollTrigger.refresh();
+    });
+    window.addEventListener('resize', function() {
+      ScrollTrigger.refresh();
+    });
+
     console.log('%c Aurelius Fine Dining ', 'background: #0a2a1c; color: #c9a862; font-size: 18px; padding: 10px 20px; border-radius: 4px; font-family: serif;');
     console.log('%c Crafted with passion ', 'color: rgba(245, 239, 230, 0.3); font-size: 12px;');
+    console.log('%c GSAP Animation Engine v3 ', 'color: rgba(201, 168, 98, 0.5); font-size: 11px;');
   </script>
 
 </body>
