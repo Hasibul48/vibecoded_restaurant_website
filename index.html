@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURELIUS — Fine Dining</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Dancing+Script:wght@400;600;700&family=Inter:wght@200;300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --emerald-deep: #0a2a1c;
+      --emerald-dark: #0d3d2e;
+      --emerald-mid: #145a3b;
+      --matte-black: #0b0b0b;
+      --warm-orange: #c9743a;
+      --gold: #c9a862;
+      --gold-light: #e0c878;
+      --cream: #f5efe6;
+      --cream-soft: #e8dfd0;
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.10);
+      --shadow-soft: 0 25px 60px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 40px rgba(201, 168, 98, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--matte-black);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .bg-gradient-main {
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, #0d3d2e 0%, #0a2a1c 40%, #0b0b0b 100%);
+    }
+    .bg-gradient-section {
+      background: radial-gradient(ellipse 90% 50% at 50% 30%, #0f3d2e 0%, #0a281a 50%, #0b0b0b 100%);
+    }
+    .bg-gradient-hero {
+      background: radial-gradient(ellipse 100% 70% at 50% 20%, #10402e 0%, #092418 50%, #070707 100%);
+    }
+    .bg-gradient-footer {
+      background: linear-gradient(180deg, #0a2a1c 0%, #060606 100%);
+    }
+
+    /* ========== TYPOGRAPHY ========== */
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-script {
+      font-family: 'Dancing Script', cursive;
+    }
+    .font-garamond {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ========== GRAIN OVERLAY ========== */
+    .grain-overlay::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* ========== HERO IMAGE ROTATION ========== */
+    .hero-img-rotate {
+      width: clamp(280px, 38vw, 500px);
+      height: clamp(280px, 38vw, 500px);
+      border-radius: 50%;
+      overflow: hidden;
+      animation: plateSpin 48s linear infinite;
+      filter: drop-shadow(0 30px 80px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 40px rgba(201, 168, 98, 0.05));
+      position: relative;
+    }
+    .hero-img-rotate:hover {
+      animation-play-state: paused;
+    }
+    .hero-food-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ========== FLOATING PARTICLES ========== */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatParticle 8s infinite ease-in-out;
+    }
+    .particle-herb {
+      width: 12px;
+      height: 4px;
+      border-radius: 2px;
+      background: #2d6b42;
+    }
+    .particle-spice {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .particle-gold {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px rgba(201, 168, 98, 0.5);
+    }
+    .particle-leaf {
+      width: 16px;
+      height: 8px;
+      border-radius: 50% 0 50% 0;
+      background: #1d5a34;
+      transform: rotate(45deg);
+    }
+
+    @keyframes floatParticle {
+      0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg) scale(0.8);
+      }
+      15% {
+        opacity: 0.4;
+      }
+      50% {
+        opacity: 0.6;
+      }
+      85% {
+        opacity: 0.2;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-120px) rotate(180deg) scale(1.2);
+      }
+    }
+
+    @keyframes plateSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ========== GLASSMORPHISM ========== */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+    }
+    .glass-strong {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: linear-gradient(135deg, var(--gold), #b8983e);
+      color: var(--matte-black);
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(201, 168, 98, 0.3), 0 0 30px rgba(201, 168, 98, 0.15);
+    }
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+    .btn-primary svg {
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    .btn-primary:hover svg {
+      transform: translateX(5px);
+    }
+
+    .btn-glass {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50px;
+      color: var(--cream);
+      font-size: 0.85rem;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.10);
+      border-color: rgba(201, 168, 98, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ========== CHEF AVATAR ========== */
+    .chef-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .chef-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .chef-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(201, 168, 98, 0.3);
+      animation: pulseRing 3s ease-in-out infinite;
+    }
+    @keyframes pulseRing {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 0.6;
+      }
+    }
+
+    /* ========== MENU CARD ========== */
+    .menu-card {
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      padding: 40px;
+      transition: all 0.4s ease;
+    }
+    .menu-card:hover {
+      border-color: rgba(201, 168, 98, 0.15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    .menu-item:hover {
+      padding-left: 8px;
+      border-bottom-color: rgba(201, 168, 98, 0.2);
+    }
+    .menu-item-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .menu-item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .menu-item-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      margin-top: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ========== SOCIAL ICONS ========== */
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      color: var(--cream-soft);
+      transition: all 0.35s ease;
+      text-decoration: none;
+    }
+    .social-icon:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--matte-black);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(201, 168, 98, 0.3);
+    }
+
+    /* ========== FOOTER FORM ========== */
+    .input-field {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: var(--cream);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .input-field::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+    .input-field:focus {
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 20px rgba(201, 168, 98, 0.06);
+    }
+
+    /* ========== SCROLL REVEAL ========== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ========== DECORATIVE LINE ========== */
+    .deco-line {
+      width: 40px;
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .deco-line-center {
+      width: 60px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* ========== MENU DECOR DIVIDER ========== */
+    .menu-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0;
+    }
+    .menu-divider .line {
+      flex: 1;
+      height: 0.5px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
+    }
+    .menu-divider .diamond {
+      width: 6px;
+      height: 6px;
+      transform: rotate(45deg);
+      background: rgba(201, 168, 98, 0.3);
+    }
+
+    /* ========== BACKGROUND DECOR ========== */
+    .bg-herb {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.06;
+    }
+    .bg-herb-1 {
+      top: 10%;
+      right: 5%;
+      width: 120px;
+      height: 200px;
+      background: radial-gradient(ellipse at center, #2d6b42, transparent 70%);
+      border-radius: 50%;
+    }
+    .bg-herb-2 {
+      bottom: 15%;
+      left: 3%;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle at center, #c9a862, transparent 70%);
+      border-radius: 50%;
+    }
+    .bg-herb-3 {
+      top: 20%;
+      left: 10%;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at center, #8b4513, transparent 70%);
+      border-radius: 50%;
+    }
+
+    /* ========== CINEMATIC LIGHTING ========== */
+    .light-spot {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+    }
+    .light-spot-1 {
+      width: 500px;
+      height: 500px;
+      top: -15%;
+      right: -10%;
+      background: radial-gradient(circle, var(--gold), transparent);
+    }
+    .light-spot-2 {
+      width: 300px;
+      height: 300px;
+      bottom: 10%;
+      left: -5%;
+      background: radial-gradient(circle, #c9743a, transparent);
+    }
+    .light-spot-3 {
+      width: 400px;
+      height: 400px;
+      top: 40%;
+      right: 20%;
+      background: radial-gradient(circle, var(--emerald-mid), transparent);
+    }
+
+    /* ========== SCROLLBAR ========== */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--matte-black);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(201, 168, 98, 0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(201, 168, 98, 0.5);
+    }
+
+    /* ========== MOUSE FOLLOWER ========== */
+    .mouse-follower {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(201, 168, 98, 0.2);
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s;
+      mix-blend-mode: screen;
+    }
+    .mouse-follower.active {
+      width: 40px;
+      height: 40px;
+      background: rgba(201, 168, 98, 0.08);
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .hero-plate {
+        width: clamp(240px, 50vw, 380px);
+        height: clamp(240px, 50vw, 380px);
+      }
+    }
+    @media (max-width: 768px) {
+      .hero-plate {
+        width: clamp(200px, 55vw, 320px);
+        height: clamp(200px, 55vw, 320px);
+      }
+      .menu-card {
+        padding: 24px;
+      }
+      .showcase-plate {
+        max-width: 100%;
+      }
+      .fork-divider {
+        display: none;
+      }
+      .mouse-follower {
+        display: none;
+      }
+    }
+    @media (max-width: 640px) {
+      .hero-plate {
+        width: 220px;
+        height: 220px;
+      }
+    }
+
+    /* ========== LOADING ANIMATION ========== */
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: var(--matte-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .page-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .page-loader .loader-ring {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.05);
+      border-top-color: var(--gold);
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Smooth scroll offset for anchor */
+    .scroll-offset {
+      scroll-margin-top: 40px;
+    }
+
+    /* ========== STORY SECTION ========== */
+    .story-image-wrap {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    }
+    .story-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    .story-image-wrap:hover img {
+      transform: scale(1.05);
+    }
+    .story-image-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.4), transparent 60%);
+      pointer-events: none;
+    }
+    .story-stat {
+      text-align: center;
+      padding: 20px;
+    }
+    .story-stat .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      line-height: 1;
+      color: var(--gold);
+    }
+    .story-stat .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 6px;
+      color: rgba(245, 239, 230, 0.35);
+    }
+    .story-stat-divider {
+      width: 1px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* ========== TESTIMONIAL CARDS ========== */
+    .testimonial-card {
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+    }
+    .testimonial-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201, 168, 98, 0.15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    .testimonial-card .quote-icon {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      line-height: 0.6;
+      color: rgba(201, 168, 98, 0.15);
+      position: absolute;
+      top: 20px;
+      right: 24px;
+    }
+    .testimonial-card .stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 12px;
+    }
+    .testimonial-card .stars svg {
+      width: 14px;
+      height: 14px;
+      color: var(--gold);
+    }
+    .testimonial-card blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      font-style: italic;
+      color: rgba(245, 239, 230, 0.7);
+      margin-bottom: 16px;
+    }
+    .testimonial-card .attribution {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .testimonial-card .attribution .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .testimonial-card .attribution .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .testimonial-card .attribution .name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--cream);
+    }
+    .testimonial-card .attribution .source {
+      font-size: 0.7rem;
+      color: rgba(245, 239, 230, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========== AWARDS SECTION ========== */
+    .award-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 28px 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .award-item:hover {
+      background: rgba(201, 168, 98, 0.04);
+      border-color: rgba(201, 168, 98, 0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .award-item .award-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+      color: var(--gold);
+    }
+    .award-item .award-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+    .award-item .award-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .award-item .award-year {
+      font-size: 0.75rem;
+      color: rgba(201, 168, 98, 0.5);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .award-item .award-desc {
+      font-size: 0.75rem;
+      color: rgba(245, 239, 230, 0.3);
+      margin-top: 4px;
+      max-width: 140px;
+    }
+
+    /* ========== AUTO-SCROLL QUOTES ========== */
+    @keyframes scrollQuotes {
+      0% {
+        transform: translateX(-50%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    .quotes-track {
+      display: flex;
+      gap: 24px;
+      width: max-content;
+      animation: scrollQuotes 50s linear infinite;
+    }
+    .quotes-track:hover {
+      animation-play-state: paused;
+    }
+    .quotes-track .testimonial-card {
+      width: 340px;
+      flex-shrink: 0;
+    }
+
+    .testimonials-fade {
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+
+    /* ========== SHOWCASE CAROUSEL ========== */
+    @keyframes scrollShowcase {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .showcase-track {
+      display: flex;
+      gap: 28px;
+      width: max-content;
+      animation: scrollShowcase 45s linear infinite;
+    }
+    .showcase-track:hover {
+      animation-play-state: paused;
+    }
+    .showcase-track .showcase-card {
+      width: 360px;
+      flex-shrink: 0;
+    }
+    .showcase-fade {
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+    .showcase-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+    }
+    .showcase-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
+      pointer-events: none;
+    }
+    .showcase-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.6);
+    }
+    .showcase-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .showcase-card:hover img {
+      transform: scale(1.1);
+    }
+    .showcase-card .card-label {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 2;
+    }
+    .showcase-card .card-label .tag {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: rgba(201, 168, 98, 0.7);
+      margin-bottom: 4px;
+    }
+    .showcase-card .card-label .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+    }
+
+    /* ========== RESERVATION SECTION ========== */
+    .reservation-card {
+      background: rgba(10, 10, 10, 0.6);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      padding: 48px;
+      max-width: 640px;
+      margin: 0 auto;
+      transition: all 0.4s ease;
+    }
+    .reservation-card:hover {
+      border-color: rgba(201, 168, 98, 0.12);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    .reservation-card .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .reservation-card .input-full {
+      grid-column: 1 / -1;
+    }
+    .reservation-card select.input-field {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23c9a862' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 44px;
+    }
+    .reservation-card select.input-field option {
+      background: #1a1a1a;
+      color: var(--cream);
+    }
+    .reservation-side-image {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      aspect-ratio: 3/4;
+      max-height: 600px;
+    }
+    .reservation-side-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    .reservation-side-image:hover img {
+      transform: scale(1.05);
+    }
+    .reservation-side-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.3), transparent 50%);
+      pointer-events: none;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer-brand {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--gold);
+    }
+    .footer-link {
+      color: rgba(245, 239, 230, 0.55);
+      font-size: 0.85rem;
+      transition: color 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+    .footer-link:hover {
+      color: var(--cream);
+    }
+    .footer-heading {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: rgba(201, 168, 98, 0.7);
+      margin-bottom: 18px;
+    }
+    .footer-social-ring {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(245, 239, 230, 0.5);
+      transition: all 0.35s ease;
+      text-decoration: none;
+    }
+    .footer-social-ring:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 168, 98, 0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 98, 0.12);
+    }
+    .footer-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      margin: 36px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOADER ===== -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-ring"></div>
+  </div>
+
+  <!-- ===== GRAIN OVERLAY ===== -->
+  <div class="grain-overlay"></div>
+
+  <!-- ===== MOUSE FOLLOWER ===== -->
+  <div class="mouse-follower" id="mouseFollower"></div>
+
+  <!-- ===== NAV ===== -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#" class="font-script text-2xl md:text-3xl text-cream-soft hover:text-gold transition-colors" style="color: var(--gold);">Aurelius</a>
+      <div class="hidden md:flex items-center gap-10">
+        <a href="#story" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Story</a>
+        <a href="#menu" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Menu</a>
+        <a href="#testimonials" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Press</a>
+        <a href="#showcase" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Gallery</a>
+        <a href="#awards" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Awards</a>
+        <a href="#reservation" class="text-sm tracking-widest text-cream-soft/70 hover:text-cream transition-colors uppercase" style="letter-spacing: 2px;">Contact</a>
+      </div>
+      <button class="md:hidden text-cream p-2" id="menuToggle" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 transition-all duration-500 opacity-0 pointer-events-none" id="mobileMenu">
+    <a href="#story" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Story</a>
+    <a href="#menu" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Menu</a>
+    <a href="#testimonials" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Press</a>
+    <a href="#showcase" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Gallery</a>
+    <a href="#awards" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Awards</a>
+    <a href="#reservation" class="font-serif text-3xl text-cream hover:text-gold transition-colors" onclick="closeMobileMenu()">Contact</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section class="relative min-h-screen flex items-center overflow-hidden bg-gradient-hero">
+    <!-- Cinematic lights -->
+    <div class="light-spot light-spot-1"></div>
+    <div class="light-spot light-spot-2"></div>
+
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-0">
+      <div class="flex flex-col md:flex-row items-center gap-12 md:gap-8 lg:gap-16">
+
+        <!-- LEFT: Text Content -->
+        <div class="flex-1 md:pr-4 lg:pr-8">
+          <div class="reveal" style="transition-delay: 0.1s;">
+            <div style="height: 28px;"></div>
+          </div>
+          <div class="reveal" style="transition-delay: 0.2s;">
+            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-2" style="color: var(--cream);">
+              Savor the
+            </h1>
+            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-2 italic" style="color: var(--gold);">
+              Art
+            </h1>
+            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-6" style="color: var(--cream);">
+              of Dining
+            </h1>
+          </div>
+          <div class="reveal" style="transition-delay: 0.3s;">
+            <p class="text-base md:text-lg text-cream-soft/60 max-w-md mb-10 leading-relaxed font-light" style="color: rgba(245, 239, 230, 0.55);">
+              An intimate journey through refined flavors, where tradition meets innovation. Every plate tells a story of passion and craftsmanship.
+            </p>
+          </div>
+          <div class="reveal flex flex-wrap items-center gap-4 md:gap-6" style="transition-delay: 0.35s;">
+            <button class="btn-primary">
+              <span>Reserve a Table</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 8h14M8 1l7 7-7 7"/>
+              </svg>
+            </button>
+            <button class="btn-glass">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              View Our Menu
+            </button>
+          </div>
+
+          <!-- Chef Profile -->
+          <div class="reveal mt-12 md:mt-16 flex items-center gap-4" style="transition-delay: 0.4s;">
+            <div class="relative" style="width: 48px; height: 48px;">
+              <div class="chef-avatar">
+                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=100&h=100&fit=crop&crop=face&q=80" alt="Chef" loading="lazy">
+              </div>
+              <div class="chef-ring"></div>
+            </div>
+            <div>
+              <p class="text-sm font-medium" style="color: var(--cream);">Chef Marco Bellini</p>
+              <p class="text-xs" style="color: rgba(201, 168, 98, 0.6);">Executive Chef</p>
+            </div>
+            <div class="ml-4 pl-4" style="border-left: 1px solid rgba(255,255,255,0.06);">
+              <div class="flex gap-0.5">
+                <svg class="w-3.5 h-3.5" style="color: var(--gold);" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-3.5 h-3.5" style="color: var(--gold);" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-3.5 h-3.5" style="color: var(--gold);" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-3.5 h-3.5" style="color: var(--gold);" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <svg class="w-3.5 h-3.5" style="color: rgba(201, 168, 98, 0.25);" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Plate -->
+        <div class="flex-1 flex items-center justify-center md:justify-end">
+          <div class="relative reveal-scale" style="transition-delay: 0.5s;">
+            <!-- Floating particles around plate (outside rotator) -->
+            <div class="particle particle-herb" style="top: -8%; left: 0%; animation-delay: 0s; animation-duration: 9s;"></div>
+            <div class="particle particle-herb" style="top: 5%; right: -8%; animation-delay: 1.2s; animation-duration: 7s; transform: rotate(30deg);"></div>
+            <div class="particle particle-spice" style="bottom: 10%; left: -10%; animation-delay: 2.5s; animation-duration: 10s; background: #8b4513; width: 5px; height: 5px;"></div>
+            <div class="particle particle-spice" style="bottom: -5%; right: 5%; animation-delay: 0.8s; animation-duration: 8s; background: #c9a862; width: 4px; height: 4px;"></div>
+            <div class="particle particle-gold" style="top: -5%; right: 15%; animation-delay: 1.8s; animation-duration: 11s;"></div>
+            <div class="particle particle-gold" style="top: 20%; left: -12%; animation-delay: 3s; animation-duration: 9s;"></div>
+            <div class="particle particle-leaf" style="bottom: 15%; right: -6%; animation-delay: 2s; animation-duration: 8.5s;"></div>
+            <div class="particle particle-leaf" style="top: 35%; right: -8%; animation-delay: 0.5s; animation-duration: 10s; transform: rotate(-20deg);"></div>
+            <div class="particle particle-spice" style="top: -3%; left: 15%; animation-delay: 1s; animation-duration: 7.5s; background: #654321; width: 3px; height: 3px;"></div>
+            <div class="particle particle-gold" style="bottom: 0%; left: 5%; animation-delay: 2.2s; animation-duration: 12s;"></div>
+
+            <!-- Rotating image only -->
+            <div class="hero-img-rotate">
+              <img src="hero-img.png" alt="Gourmet dish" class="hero-food-img">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0b0b0b] to-transparent z-10"></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- OUR STORY SECTION -->
+  <!-- ============================================================ -->
+  <section id="story" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 85% 55% at 50% 30%, #0a3325 0%, #0a1f14 50%, #080808 100%); scroll-margin-top: 40px;">
+    <div class="light-spot" style="width: 450px; height: 450px; top: -10%; left: 20%; background: radial-gradient(circle, rgba(201,168,98,0.06), transparent);"></div>
+    <div class="light-spot" style="width: 300px; height: 300px; bottom: 10%; right: 5%; background: radial-gradient(circle, rgba(16,64,46,0.15), transparent);"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <!-- Section header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">Our Legacy</p>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
+          The <span style="color: var(--gold);">Story</span>
+        </h2>
+        <div class="deco-line-center mx-auto mt-5"></div>
+      </div>
+
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+        <!-- Left: Image -->
+        <div class="lg:w-1/2 reveal-left">
+          <div class="story-image-wrap" style="aspect-ratio: 4/5; max-height: 600px;">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=1000&fit=crop&auto=format&q=80" alt="Restaurant interior" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Right: Text -->
+        <div class="lg:w-1/2 reveal-right">
+          <span class="font-script text-4xl md:text-5xl" style="color: rgba(201, 168, 98, 0.15); position: absolute; top: -20px; left: -10px; pointer-events: none;">&ldquo;</span>
+          <h3 class="font-serif text-3xl md:text-4xl mb-6" style="color: var(--cream);">
+            A Vision<span style="color: var(--gold);"> of Excellence</span>
+          </h3>
+          <div class="space-y-5 text-base leading-relaxed" style="color: rgba(245, 239, 230, 0.5); max-width: 520px;">
+            <p>
+              Born from a passion for culinary innovation and a reverence for tradition, Aurelius opened its doors with a singular vision: to create not just meals, but memories that linger long after the last bite.
+            </p>
+            <p>
+              Nestled in the heart of Manhattan, our kitchen is a sanctuary where the world's finest ingredients meet the artistry of Chef Marco Bellini and his dedicated team.
+            </p>
+            <p>
+              Every dish that leaves our pass is a testament to the belief that dining is the most intimate of arts — a symphony of flavor, texture, and emotion, composed with precision and served with warmth.
+            </p>
+          </div>
+
+          <!-- Signature -->
+          <div class="mt-8 pt-8" style="border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <div class="flex items-center gap-4">
+              <div class="relative" style="width: 44px; height: 44px;">
+                <div class="chef-avatar" style="width:44px;height:44px;">
+                  <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=100&h=100&fit=crop&crop=face&q=80" alt="Chef" loading="lazy">
+                </div>
+                <div class="chef-ring"></div>
+              </div>
+              <div>
+                <p class="font-script text-xl" style="color: var(--cream);">Marco Bellini</p>
+                <p class="text-xs" style="color: rgba(201, 168, 98, 0.5);">Executive Chef &amp; Founder</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="flex items-center gap-6 md:gap-10 mt-10">
+            <div class="story-stat">
+              <div class="number" style="font-size: 2rem;">12</div>
+              <div class="label">Years</div>
+            </div>
+            <div class="story-stat-divider"></div>
+            <div class="story-stat">
+              <div class="number" style="font-size: 2rem;">50k+</div>
+              <div class="label">Guests Served</div>
+            </div>
+            <div class="story-stat-divider"></div>
+            <div class="story-stat">
+              <div class="number" style="font-size: 2rem;">18</div>
+              <div class="label">Awards</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FEATURED MENU SECTION -->
+  <!-- ============================================================ -->
+  <section id="menu" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden bg-gradient-section scroll-offset">
+    <!-- Background decorations -->
+    <div class="bg-herb bg-herb-1"></div>
+    <div class="bg-herb bg-herb-2"></div>
+    <div class="bg-herb bg-herb-3"></div>
+    <div class="light-spot" style="width: 350px; height: 350px; top: 30%; right: 10%; background: radial-gradient(circle, rgba(201,168,98,0.08), transparent);"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <!-- Section header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">Our Curation</p>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
+          Featured <span style="color: var(--gold);">Menu</span>
+        </h2>
+        <div class="deco-line-center mx-auto mt-5"></div>
+      </div>
+
+      <div class="flex flex-col lg:flex-row items-stretch gap-10 lg:gap-16">
+
+        <!-- LEFT: Food plate -->
+        <div class="lg:w-1/2 reveal-left">
+          <div class="relative h-full min-h-[360px] md:min-h-[480px] rounded-3xl overflow-hidden" style="box-shadow: 0 30px 80px rgba(0,0,0,0.5);">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=900&fit=crop&auto=format&q=80" alt="Featured dish" class="w-full h-full object-cover" style="position: absolute; inset: 0;" loading="lazy">
+            <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(0,0,0,0.3), transparent 50%, rgba(0,0,0,0.1));"></div>
+            <div class="absolute bottom-6 left-6 right-6">
+              <div class="inline-block glass px-4 py-2 rounded-full text-xs tracking-widest uppercase" style="color: var(--gold);">
+                Chef's Special
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Menu card -->
+        <div class="lg:w-1/2 reveal-right">
+          <div class="menu-card h-full flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-serif text-2xl md:text-3xl" style="color: var(--cream);">Degustation</h3>
+              <span class="font-serif text-lg italic" style="color: var(--gold);">$189</span>
+            </div>
+            <p class="text-sm mb-8" style="color: rgba(245, 239, 230, 0.4);">A curated six-course journey through our chef's finest creations</p>
+
+            <!-- Menu items -->
+            <div class="flex-1 space-y-1">
+
+              <div class="menu-item">
+                <div class="menu-item-thumb">
+                  <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=100&h=100&fit=crop&auto=format&q=60" alt="Amuse-bouche" loading="lazy">
+                </div>
+                <div class="menu-item-dot"></div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-serif text-lg" style="color: var(--cream);">Amuse-Bouche</h4>
+                    <span class="text-xs font-light" style="color: rgba(255,255,255,0.3);">—</span>
+                  </div>
+                  <p class="text-xs mt-1" style="color: rgba(245, 239, 230, 0.35);">Seasonal tartlet · Truffle espuma</p>
+                </div>
+              </div>
+
+              <div class="menu-item">
+                <div class="menu-item-thumb">
+                  <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=100&h=100&fit=crop&auto=format&q=60" alt="Foie Gras" loading="lazy">
+                </div>
+                <div class="menu-item-dot"></div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-serif text-lg" style="color: var(--cream);">Pan-Seared Foie Gras</h4>
+                    <span class="text-xs font-light" style="color: rgba(255,255,255,0.3);">—</span>
+                  </div>
+                  <p class="text-xs mt-1" style="color: rgba(245, 239, 230, 0.35);">Fig compote · Sauternes gel · Brioche</p>
+                </div>
+              </div>
+
+              <div class="menu-item">
+                <div class="menu-item-thumb">
+                  <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=100&h=100&fit=crop&auto=format&q=60" alt="Risotto" loading="lazy">
+                </div>
+                <div class="menu-item-dot"></div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-serif text-lg" style="color: var(--cream);">Black Truffle Risotto</h4>
+                    <span class="text-xs font-light" style="color: rgba(255,255,255,0.3);">—</span>
+                  </div>
+                  <p class="text-xs mt-1" style="color: rgba(245, 239, 230, 0.35);">Carnaroli · Aged parmesan · Périgord truffle</p>
+                </div>
+              </div>
+
+              <div class="menu-item">
+                <div class="menu-item-thumb">
+                  <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=100&h=100&fit=crop&auto=format&q=60" alt="Wagyu" loading="lazy">
+                </div>
+                <div class="menu-item-dot"></div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-serif text-lg" style="color: var(--cream);">Wagyu Tomahawk</h4>
+                    <span class="text-xs font-light" style="color: rgba(255,255,255,0.3);">—</span>
+                  </div>
+                  <p class="text-xs mt-1" style="color: rgba(245, 239, 230, 0.35);">Herb crust · Red wine jus · Root vegetables</p>
+                </div>
+              </div>
+
+              <div class="menu-item">
+                <div class="menu-item-thumb">
+                  <img src="https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=100&h=100&fit=crop&auto=format&q=60" alt="Dessert" loading="lazy">
+                </div>
+                <div class="menu-item-dot"></div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-serif text-lg" style="color: var(--cream);">Valrhona Chocolate</h4>
+                    <span class="text-xs font-light" style="color: rgba(255,255,255,0.3);">—</span>
+                  </div>
+                  <p class="text-xs mt-1" style="color: rgba(245, 239, 230, 0.35);">Dark ganache · Sea salt · Olive oil</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Menu footer -->
+            <div class="mt-6 pt-6 flex items-center justify-between" style="border-top: 1px solid rgba(255, 255, 255, 0.05);">
+              <span class="text-sm" style="color: rgba(245, 239, 230, 0.3);">Wine pairing available +$95</span>
+              <button class="btn-glass text-xs py-2 px-5">Full Menu</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TESTIMONIALS / PRESS SECTION -->
+  <!-- ============================================================ -->
+  <section id="testimonials" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 80% 50% at 50% 30%, #0c3024 0%, #091b12 50%, #070707 100%); scroll-margin-top: 40px;">
+    <div class="light-spot" style="width: 500px; height: 500px; top: 20%; right: -10%; background: radial-gradient(circle, rgba(201,168,98,0.05), transparent);"></div>
+    <div class="light-spot" style="width: 350px; height: 350px; bottom: 5%; left: -5%; background: radial-gradient(circle, rgba(16,64,46,0.1), transparent);"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <!-- Section header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">Press &amp; Praise</p>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
+          What Critics <span style="color: var(--gold);">Say</span>
+        </h2>
+        <div class="deco-line-center mx-auto mt-5"></div>
+      </div>
+
+      <!-- Auto-scrolling quotes track with fade edges -->
+      <div class="testimonials-fade overflow-hidden reveal">
+        <div class="quotes-track">
+
+          <!-- 1 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"The most transcendent dining experience I have had in a decade. Bellini's truffle risotto is nothing short of a masterpiece."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">James Thornton</div><div class="source">The New York Times</div></div></div>
+          </div>
+
+          <!-- 2 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"Aurelius redefines what fine dining means in the 21st century. Impeccable service, daring flavors, and an atmosphere of pure elegance."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Sophia Laurent</div><div class="source">Michelin Guide</div></div></div>
+          </div>
+
+          <!-- 3 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"An orchestra of flavors conducted with precision. The Wagyu Tomahawk alone is worth the journey to New York."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">David Chen</div><div class="source">Food &amp; Wine Magazine</div></div></div>
+          </div>
+
+          <!-- 4 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"Every plate tells a story, and at Aurelius, each chapter is more captivating than the last. A true gem of New York dining."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Elena Vasquez</div><div class="source">Forbes Travel Guide</div></div></div>
+          </div>
+
+          <!-- 5 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"The wine pairing is an education in itself. Each vintage chosen to elevate Bellini's already extraordinary cuisine."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Marcus Webb</div><div class="source">The Wall Street Journal</div></div></div>
+          </div>
+
+          <!-- 6 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"Bellini's hand-rolled pappardelle is a revelation — silken ribbons of pasta that taste of tradition and imagination in every bite."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Isabella Rossi</div><div class="source">La Cucina Italiana</div></div></div>
+          </div>
+
+          <!-- 7 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"From the amuse-bouche to the petit fours, every detail is considered. This is cooking at the highest level."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Thomas Knight</div><div class="source">The Guardian</div></div></div>
+          </div>
+
+          <!-- 8 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"The dessert alone — Valrhona chocolate with sea salt and olive oil — is worth the pilgrimage. Hauntingly beautiful."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Amara Osei</div><div class="source">Condé Nast Traveler</div></div></div>
+          </div>
+
+          <!-- 9 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"Aurelius has achieved something rare — a dining room that feels both grand and intimate, where every guest is treated like royalty."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1509955259780-7b1468f5f77c?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Liam Gallagher</div><div class="source">The Independent</div></div></div>
+          </div>
+
+          <!-- 10 -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"The tasting menu is a journey through Bellini's imagination — surprising, bold, and deeply satisfying. An unforgettable evening."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Victoria Park</div><div class="source">Harper's Bazaar</div></div></div>
+          </div>
+
+          <!-- === duplicate set for seamless infinite loop === -->
+          <!-- 1' -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"The most transcendent dining experience I have had in a decade. Bellini's truffle risotto is nothing short of a masterpiece."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">James Thornton</div><div class="source">The New York Times</div></div></div>
+          </div>
+
+          <!-- 2' -->
+          <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <div class="stars"><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></div>
+            <blockquote>"Aurelius redefines what fine dining means in the 21st century. Impeccable service, daring flavors, and an atmosphere of pure elegance."</blockquote>
+            <div class="attribution"><div class="avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=face&q=60" alt="" loading="lazy"></div><div><div class="name">Sophia Laurent</div><div class="source">Michelin Guide</div></div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOD SHOWCASE SECTION -->
+  <!-- ============================================================ -->
+  <section id="showcase" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 80% 50% at 50% 30%, #0a3325 0%, #0a1a14 50%, #070707 100%); scroll-margin-top: 40px;">
+    <div class="light-spot" style="width: 400px; height: 400px; top: 10%; left: -10%; background: radial-gradient(circle, rgba(201,168,98,0.06), transparent);"></div>
+    <div class="light-spot" style="width: 350px; height: 350px; bottom: 5%; right: -5%; background: radial-gradient(circle, rgba(201,168,98,0.05), transparent);"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <!-- Section header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">From Our Kitchen</p>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
+          Signature <span style="color: var(--gold);">Plates</span>
+        </h2>
+        <div class="deco-line-center mx-auto mt-5"></div>
+      </div>
+
+      <!-- Auto-scrolling showcase track with fade edges -->
+      <div class="showcase-fade overflow-hidden reveal">
+        <div class="showcase-track">
+
+          <!-- 1 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&h=600&fit=crop&auto=format&q=80" alt="Truffle Pappardelle" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Handmade</div>
+              <div class="title">Truffle Pappardelle</div>
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop&auto=format&q=80" alt="Herb-Crusted Lamb" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Grilled</div>
+              <div class="title">Herb-Crusted Lamb</div>
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&h=600&fit=crop&auto=format&q=80" alt="Steak" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Prime Cut</div>
+              <div class="title">Wagyu Tomahawk</div>
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop&auto=format&q=80" alt="Pizza" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Wood-Fired</div>
+              <div class="title">Truffle Pizza</div>
+            </div>
+          </div>
+
+          <!-- 5 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=600&fit=crop&auto=format&q=80" alt="Salad" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Seasonal</div>
+              <div class="title">Garden Harvest</div>
+            </div>
+          </div>
+
+          <!-- 6 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=600&h=600&fit=crop&auto=format&q=80" alt="Risotto" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Creamy</div>
+              <div class="title">Black Truffle Risotto</div>
+            </div>
+          </div>
+
+          <!-- 7 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=600&fit=crop&auto=format&q=80" alt="Lobster" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Ocean Fresh</div>
+              <div class="title">Butter-Poached Lobster</div>
+            </div>
+          </div>
+
+          <!-- 8 -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=600&h=600&fit=crop&auto=format&q=80" alt="Dessert" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Decadent</div>
+              <div class="title">Valrhona Chocolate</div>
+            </div>
+          </div>
+
+          <!-- === duplicate set for seamless loop === -->
+          <!-- 1' -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&h=600&fit=crop&auto=format&q=80" alt="Truffle Pappardelle" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Handmade</div>
+              <div class="title">Truffle Pappardelle</div>
+            </div>
+          </div>
+
+          <!-- 2' -->
+          <div class="showcase-card">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop&auto=format&q=80" alt="Herb-Crusted Lamb" loading="lazy">
+            <div class="card-label">
+              <div class="tag">Grilled</div>
+              <div class="title">Herb-Crusted Lamb</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom description -->
+      <div class="text-center mt-14 md:mt-20 reveal">
+        <p class="font-garamond text-lg md:text-xl italic max-w-2xl mx-auto" style="color: rgba(245, 239, 230, 0.35);">
+          "Cooking is an art, but eating is a feeling — we craft each plate to stir the soul."
+        </p>
+        <div class="mt-6 flex items-center justify-center gap-3 text-xs tracking-[3px] uppercase" style="color: rgba(201, 168, 98, 0.5);">
+          <span class="deco-line" style="width: 30px;"></span>
+          Chef Marco Bellini
+          <span class="deco-line" style="width: 30px;"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- AWARDS & RECOGNITION SECTION -->
+  <!-- ============================================================ -->
+  <section id="awards" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 85% 55% at 50% 30%, #0d3024 0%, #091a10 50%, #070707 100%); scroll-margin-top: 40px;">
+    <div class="light-spot" style="width: 400px; height: 400px; top: 15%; left: -8%; background: radial-gradient(circle, rgba(201,168,98,0.06), transparent);"></div>
+    <div class="light-spot" style="width: 300px; height: 300px; bottom: 10%; right: 5%; background: radial-gradient(circle, rgba(16,64,46,0.12), transparent);"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <!-- Section header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">Accolades</p>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
+          Awards &amp; <span style="color: var(--gold);">Recognition</span>
+        </h2>
+        <div class="deco-line-center mx-auto mt-5"></div>
+      </div>
+
+      <!-- Awards grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 reveal-scale">
+
+        <!-- Award 1 -->
+        <div class="award-item">
+          <div class="award-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="16" r="10"/>
+              <path d="M24 26v8"/>
+              <path d="M18 38h12"/>
+              <path d="M24 34l-6 8"/>
+              <path d="M24 34l6 8"/>
+              <path d="M14 20l-8 4 4 8 8-4"/>
+              <path d="M34 20l8 4-4 8-8-4"/>
+            </svg>
+          </div>
+          <div class="award-name">Michelin Star</div>
+          <div class="award-year">2023 &middot; 2024</div>
+          <div class="award-desc">Two consecutive years</div>
+        </div>
+
+        <!-- Award 2 -->
+        <div class="award-item">
+          <div class="award-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="24 4 30 16 44 18 34 28 36 42 24 34 12 42 14 28 4 18 18 16"/>
+            </svg>
+          </div>
+          <div class="award-name">James Beard Award</div>
+          <div class="award-year">2024</div>
+          <div class="award-desc">Outstanding Chef</div>
+        </div>
+
+        <!-- Award 3 -->
+        <div class="award-item">
+          <div class="award-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="24" r="18"/>
+              <path d="M16 24l6 6 10-10"/>
+              <path d="M12 24l6 6"/>
+            </svg>
+          </div>
+          <div class="award-name">World's 50 Best</div>
+          <div class="award-year">2024</div>
+          <div class="award-desc">Ranked #22</div>
+        </div>
+
+        <!-- Award 4 -->
+        <div class="award-item">
+          <div class="award-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 4L30 16H44L34 26L38 40L24 32L10 40L14 26L4 16H18L24 4Z"/>
+              <circle cx="24" cy="20" r="3"/>
+            </svg>
+          </div>
+          <div class="award-name">Forbes Travel Guide</div>
+          <div class="award-year">2024</div>
+          <div class="award-desc">Five-Star Rating</div>
+        </div>
+
+      </div>
+
+      <!-- Bottom note -->
+      <div class="text-center mt-12 reveal">
+        <p class="text-sm" style="color: rgba(245, 239, 230, 0.2);">
+          Our commitment to excellence is recognized by the world's most prestigious culinary institutions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- RESERVATION SECTION -->
+  <!-- ============================================================ -->
+  <section id="reservation" class="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden" style="background: radial-gradient(ellipse 80% 50% at 50% 20%, #0d3528 0%, #091f14 50%, #070707 100%); scroll-margin-top: 40px;">
+    <div class="light-spot" style="width: 500px; height: 500px; top: -5%; right: -10%; background: radial-gradient(circle, rgba(201,168,98,0.05), transparent);"></div>
+    <div class="light-spot" style="width: 350px; height: 350px; bottom: 10%; left: -5%; background: radial-gradient(circle, rgba(16,64,46,0.1), transparent);"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <!-- Section header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <p class="text-xs tracking-[4px] uppercase mb-4" style="color: rgba(201, 168, 98, 0.6); letter-spacing: 5px;">Book Your Experience</p>
+        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl" style="color: var(--cream);">
+          Make a <span style="color: var(--gold);">Reservation</span>
+        </h2>
+        <div class="deco-line-center mx-auto mt-5"></div>
+      </div>
+
+      <div class="flex flex-col lg:flex-row items-stretch gap-10 lg:gap-16">
+
+        <!-- Left: Image -->
+        <div class="lg:w-1/2 reveal-left">
+          <div class="reservation-side-image relative">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=1000&fit=crop&auto=format&q=80" alt="Dining atmosphere" loading="lazy">
+            <div class="absolute bottom-6 left-6 right-6 z-10">
+              <div class="glass rounded-2xl p-5">
+                <div class="flex items-center gap-4">
+                  <div class="relative" style="width: 40px; height: 40px;">
+                    <div class="chef-avatar" style="width:40px;height:40px;">
+                      <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=80&h=80&fit=crop&crop=face&q=60" alt="Chef" loading="lazy">
+                    </div>
+                    <div class="chef-ring"></div>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium" style="color: var(--cream);">Chef Marco Bellini</p>
+                    <p class="text-xs" style="color: rgba(201, 168, 98, 0.5);">"Let us craft your evening."</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="lg:w-1/2 reveal-right flex items-center">
+          <div class="reservation-card w-full">
+            <form onsubmit="event.preventDefault(); alert('Thank you! Your reservation request has been received. We will confirm within 24 hours.');">
+              <div class="input-row mb-4">
+                <input type="text" class="input-field" placeholder="First name" required>
+                <input type="text" class="input-field" placeholder="Last name" required>
+              </div>
+              <div class="input-row mb-4">
+                <input type="email" class="input-field" placeholder="Email address" required>
+                <input type="tel" class="input-field" placeholder="Phone number">
+              </div>
+              <div class="input-row mb-4">
+                <select class="input-field" required>
+                  <option value="" disabled selected>Number of guests</option>
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4 Guests</option>
+                  <option value="5">5 Guests</option>
+                  <option value="6">6 Guests</option>
+                  <option value="8">8 Guests</option>
+                  <option value="10">10+ Guests</option>
+                </select>
+                <select class="input-field" required>
+                  <option value="" disabled selected>Dining time</option>
+                  <option value="17:30">17:30</option>
+                  <option value="18:00">18:00</option>
+                  <option value="18:30">18:30</option>
+                  <option value="19:00">19:00</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                  <option value="21:00">21:00</option>
+                </select>
+              </div>
+              <div class="mb-4">
+                <input type="date" class="input-field" required>
+              </div>
+              <div class="mb-6">
+                <textarea class="input-field" rows="3" placeholder="Special requests (allergies, dietary, occasion...)" style="resize: none;"></textarea>
+              </div>
+              <button type="submit" class="btn-primary w-full justify-center text-sm py-4">
+                <span>Confirm Reservation</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 8h14M8 1l7 7-7 7"/>
+                </svg>
+              </button>
+              <p class="text-center text-xs mt-4" style="color: rgba(245, 239, 230, 0.15);">
+                We will confirm your reservation within 24 hours
+              </p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER SECTION -->
+  <!-- ============================================================ -->
+  <footer class="relative px-6 md:px-12 pt-20 pb-8 overflow-hidden" style="background: linear-gradient(180deg, #0a1f14 0%, #060b08 100%);">
+    <div class="max-w-7xl mx-auto relative z-10">
+      <!-- Top section: brand + columns -->
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12">
+        <!-- Brand column -->
+        <div class="col-span-2 md:col-span-2 lg:col-span-2 reveal" style="transition-delay: 0.05s;">
+          <div class="footer-brand" style="font-size: 2.2rem;">Aurelius</div>
+          <p class="text-sm mt-3 leading-relaxed" style="color: rgba(245, 239, 230, 0.5); max-width: 240px;">
+            An intimate fine dining experience at the intersection of tradition and innovation.
+          </p>
+          <div class="flex gap-3 mt-6">
+            <a href="#" class="footer-social-ring" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-ring" aria-label="X">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733 -16zM4 20l6.768 -6.768M20 4l-6.768 6.768"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-ring" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-ring" aria-label="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="3" ry="3"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="reveal" style="transition-delay: 0.1s;">
+          <div class="footer-heading">Navigate</div>
+          <ul class="space-y-3">
+            <li><a href="#story" class="footer-link">Our Story</a></li>
+            <li><a href="#menu" class="footer-link">Menu</a></li>
+            <li><a href="#testimonials" class="footer-link">Press</a></li>
+            <li><a href="#showcase" class="footer-link">Gallery</a></li>
+            <li><a href="#awards" class="footer-link">Awards</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="reveal" style="transition-delay: 0.15s;">
+          <div class="footer-heading">Contact</div>
+          <ul class="space-y-3">
+            <li><span class="footer-link">123 Gourmet Ave, NY</span></li>
+            <li><a href="tel:+12125550189" class="footer-link">+1 (212) 555-0189</a></li>
+            <li><a href="mailto:hello@aurelius.com" class="footer-link">hello@aurelius.com</a></li>
+          </ul>
+        </div>
+
+        <!-- Hours -->
+        <div class="reveal" style="transition-delay: 0.2s;">
+          <div class="footer-heading">Hours</div>
+          <ul class="space-y-3">
+            <li><span class="footer-link">Tue–Sun 18:00–23:00</span></li>
+            <li><span class="footer-link">Fri–Sat till 01:00</span></li>
+            <li><span class="footer-link" style="color: rgba(201, 168, 98, 0.6);">Mon — Closed</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <!-- Bottom bar -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+        <p class="text-xs" style="color: rgba(245, 239, 230, 0.25);">
+          &copy; 2024 Aurelius Fine Dining. All rights reserved.
+        </p>
+        <div class="flex gap-6">
+          <a href="#" class="footer-link">Privacy</a>
+          <a href="#" class="footer-link">Terms</a>
+          <a href="#" class="footer-link">Careers</a>
+          <a href="#" class="footer-link">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT -->
+  <!-- ============================================================ -->
+  <script>
+    // ---- Page Loader ----
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('pageLoader');
+      if (loader) {
+        setTimeout(function() {
+          loader.classList.add('hidden');
+        }, 600);
+      }
+    });
+
+    // ---- Mobile Menu ----
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', function() {
+        menuOpen = !menuOpen;
+        if (menuOpen) {
+          mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+          mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+        } else {
+          mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+          mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+      });
+    }
+
+    function closeMobileMenu() {
+      if (mobileMenu) {
+        menuOpen = false;
+        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+        mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+      }
+    }
+
+    // ---- Intersection Observer for Reveals ----
+    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -60px 0px'
+    });
+
+    revealElements.forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // ---- Mouse Follower ----
+    const follower = document.getElementById('mouseFollower');
+
+    if (follower) {
+      let mouseX = 0,
+        mouseY = 0;
+      let followerX = 0,
+        followerY = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animateFollower() {
+        followerX += (mouseX - followerX) * 0.08;
+        followerY += (mouseY - followerY) * 0.08;
+        follower.style.transform = 'translate(' + followerX + 'px, ' + followerY + 'px) translate(-50%, -50%)';
+        requestAnimationFrame(animateFollower);
+      }
+
+      animateFollower();
+
+      // Scale up on interactive elements
+      document.querySelectorAll('a, button, .menu-item, .showcase-card').forEach(function(el) {
+        el.addEventListener('mouseenter', function() {
+          follower.classList.add('active');
+        });
+        el.addEventListener('mouseleave', function() {
+          follower.classList.remove('active');
+        });
+      });
+    }
+
+    // ---- Navbar scroll effect ----
+    const nav = document.querySelector('nav');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', function() {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 100) {
+        nav.style.background = 'rgba(11, 11, 11, 0.7)';
+        nav.style.backdropFilter = 'blur(30px)';
+        nav.style.borderBottom = '1px solid rgba(255, 255, 255, 0.03)';
+      } else {
+        nav.style.background = 'transparent';
+        nav.style.backdropFilter = 'none';
+        nav.style.borderBottom = 'none';
+      }
+      lastScroll = currentScroll;
+    });
+
+    // ---- Particles regeneration (subtle random movement) ----
+    const particles = document.querySelectorAll('.particle');
+    particles.forEach(function(p) {
+      const duration = parseFloat(p.style.animationDuration) || 8;
+      const delay = parseFloat(p.style.animationDelay) || 0;
+      // Slightly randomize
+      p.style.animationDuration = (duration + (Math.random() * 2 - 1)) + 's';
+      p.style.animationDelay = (delay + Math.random()) + 's';
+    });
+
+    console.log('%c Aurelius Fine Dining ', 'background: #0a2a1c; color: #c9a862; font-size: 18px; padding: 10px 20px; border-radius: 4px; font-family: serif;');
+    console.log('%c Crafted with passion ', 'color: rgba(245, 239, 230, 0.3); font-size: 12px;');
+  </script>
+
+</body>
+</html>
