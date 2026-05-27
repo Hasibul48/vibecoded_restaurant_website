@@ -97,6 +97,31 @@ export default function Home() {
       .from('.hero-buttons', { y: 30, opacity: 0 }, '-=0.3')
       .from('.chef-profile', { y: 20, opacity: 0 }, '-=0.2')
       .from('.particle', { scale: 0, opacity: 0, stagger: 0.03 }, '-=0.4')
+      .from('.food-item', { scale: 0, opacity: 0, stagger: 0.05 }, '-=0.3')
+
+    // Food items scroll out — each in different direction
+    const foodDirs = [
+      { x: -70, y: -60, rotate: -15 },
+      { x: 70, y: -50, rotate: 12 },
+      { x: -50, y: 70, rotate: -10 },
+      { x: 60, y: 65, rotate: 18 },
+    ]
+    gsap.utils.toArray('.food-item').forEach((item: any, i: number) => {
+      const d = foodDirs[i] || foodDirs[0]
+      gsap.to(item, {
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+        x: d.x,
+        y: d.y,
+        rotation: d.rotate,
+        opacity: 0,
+        ease: 'none',
+      })
+    })
 
     // Scroll reveals
     const revealDefaults = { duration: 0.9, ease: spring }
@@ -457,8 +482,8 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-10">
             <a href="#story" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="story">Story</a>
             <a href="#menu" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="menu">Menu</a>
-            <a href="#testimonials" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="testimonials">Press</a>
-            <a href="#signatures" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="signatures">Signatures</a>
+            <a href="#testimonials" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="testimonials">Testimonials</a>
+            <a href="#signatures" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="signatures">Popular Items</a>
             <a href="#awards" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="awards">Awards</a>
             <a href="#reservation" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="reservation">Contact</a>
           </div>
@@ -480,8 +505,8 @@ export default function Home() {
       >
         <a href="#story" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Story</a>
         <a href="#menu" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Menu</a>
-        <a href="#testimonials" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Press</a>
-        <a href="#signatures" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Signatures</a>
+        <a href="#testimonials" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Testimonials</a>
+        <a href="#signatures" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Popular Items</a>
         <a href="#awards" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Awards</a>
         <a href="#reservation" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Contact</a>
       </div>
@@ -509,18 +534,18 @@ export default function Home() {
                 </p>
               </div>
               <div className="hero-buttons flex flex-wrap items-center gap-4 md:gap-6">
-                <button className="btn-primary">
+                <a href="#reservation" className="btn-primary">
                   <span>Reserve a Table</span>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M1 8h14M8 1l7 7-7 7"/>
                   </svg>
-                </button>
-                <button className="btn-glass">
+                </a>
+                <a href="#menu" className="btn-glass">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="5 3 19 12 5 21 5 3"/>
                   </svg>
                   View Our Menu
-                </button>
+                </a>
               </div>
 
               {/* Chef Profile */}
@@ -559,6 +584,19 @@ export default function Home() {
                 <div className="particle particle-leaf" style={{ top: '35%', right: '-8%', animationDelay: '0.5s', animationDuration: '10s', transform: 'rotate(-20deg)' }}></div>
                 <div className="particle particle-spice" style={{ top: '-3%', left: '15%', animationDelay: '1s', animationDuration: '7.5s', background: '#654321', width: 3, height: 3 }}></div>
                 <div className="particle particle-gold" style={{ bottom: '0%', left: '5%', animationDelay: '2.2s', animationDuration: '12s' }}></div>
+
+                <div className="food-item" style={{ width: 'clamp(52px, 7vw, 78px)', top: '7%', left: '2%', animationDelay: '0s', animationDuration: '6s' }}>
+                  <img src="/food-chicken.png" alt="" className="food-item-img" />
+                </div>
+                <div className="food-item" style={{ width: 'clamp(58px, 8vw, 90px)', bottom: '-4%', left: '-2%', animationDelay: '1.5s', animationDuration: '7.5s' }}>
+                  <img src="/food-bowl.png" alt="" className="food-item-img" />
+                </div>
+                <div className="food-item" style={{ width: 'clamp(55px, 7vw, 80px)', bottom: '-8%', right: '8%', animationDelay: '2.8s', animationDuration: '5.5s' }}>
+                  <img src="/food-egg.png" alt="" className="food-item-img" />
+                </div>
+                <div className="food-item" style={{ width: 'clamp(62px, 8.5vw, 95px)', top: '-5%', right: '12%', animationDelay: '0.8s', animationDuration: '8s' }}>
+                  <img src="/food-burger.png" alt="" className="food-item-img" />
+                </div>
 
                 <div className="hero-img-rotate">
                   <img src="/food-plate.png" alt="Gourmet dish" className="hero-food-img" />
@@ -735,9 +773,9 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center mb-16 md:mb-20 reveal">
-            <p className="text-xs tracking-[4px] uppercase mb-4" style={{ color: 'rgba(201, 168, 98, 0.6)', letterSpacing: '5px' }}>Press &amp; Praise</p>
+            <p className="text-xs tracking-[4px] uppercase mb-4" style={{ color: 'rgba(201, 168, 98, 0.6)', letterSpacing: '5px' }}>Testimonials</p>
             <h2 className="section-heading font-serif text-4xl md:text-5xl lg:text-6xl" style={{ color: 'var(--cream)' }}>
-              <span>What</span> <span>Critics</span> <span style={{ color: 'var(--gold)' }}>Say</span>
+              <span>What</span> <span>Guests</span> <span style={{ color: 'var(--gold)' }}>Say</span>
             </h2>
             <div className="deco-line-center mx-auto mt-5"></div>
           </div>
@@ -800,9 +838,9 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center mb-16 md:mb-20 reveal">
-            <p className="text-xs tracking-[4px] uppercase mb-4" style={{ color: 'rgba(201, 168, 98, 0.6)', letterSpacing: '5px' }}>Art on a Plate</p>
+            <p className="text-xs tracking-[4px] uppercase mb-4" style={{ color: 'rgba(201, 168, 98, 0.6)', letterSpacing: '5px' }}>Fan Favorites</p>
             <h2 className="section-heading font-serif text-4xl md:text-5xl lg:text-6xl" style={{ color: 'var(--cream)' }}>
-              <span>Signature</span> <span style={{ color: 'var(--gold)' }}>Creations</span>
+              <span>Popular</span> <span style={{ color: 'var(--gold)' }}>Items</span>
             </h2>
             <div className="deco-line-center mx-auto mt-5"></div>
           </div>
@@ -1007,8 +1045,8 @@ export default function Home() {
               <ul className="space-y-3">
                 <li><a href="#story" className="footer-link">Our Story</a></li>
                 <li><a href="#menu" className="footer-link">Menu</a></li>
-                <li><a href="#testimonials" className="footer-link">Press</a></li>
-                <li><a href="#signatures" className="footer-link">Signatures</a></li>
+                <li><a href="#testimonials" className="footer-link">Testimonials</a></li>
+                <li><a href="#signatures" className="footer-link">Popular Items</a></li>
                 <li><a href="#awards" className="footer-link">Awards</a></li>
               </ul>
             </div>
