@@ -478,12 +478,12 @@ export default function Home() {
         )}
         style={{ background: 'rgba(0,0,0,0.95)', backdropFilter: 'blur(24px)' }}
       >
-        <a href="#story" className="font-serif text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Story</a>
-        <a href="#menu" className="font-serif text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Menu</a>
-        <a href="#testimonials" className="font-serif text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Press</a>
-        <a href="#signatures" className="font-serif text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Signatures</a>
-        <a href="#awards" className="font-serif text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Awards</a>
-        <a href="#reservation" className="font-serif text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Contact</a>
+        <a href="#story" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Story</a>
+        <a href="#menu" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Menu</a>
+        <a href="#testimonials" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Press</a>
+        <a href="#signatures" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Signatures</a>
+        <a href="#awards" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Awards</a>
+        <a href="#reservation" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Contact</a>
       </div>
 
       {/* HERO SECTION */}
@@ -492,7 +492,7 @@ export default function Home() {
         <div className="light-spot light-spot-2"></div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-0">
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-8 lg:gap-16">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-8 lg:gap-16">
             {/* LEFT */}
             <div className="flex-1 md:pr-4 lg:pr-8">
               <div style={{ height: 28 }}></div>
@@ -585,7 +585,7 @@ export default function Home() {
             <div className="deco-line-center mx-auto mt-5"></div>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-20">
             <div className="lg:w-1/2 reveal-left">
               <div className="story-image-wrap" style={{ aspectRatio: '4/5', maxHeight: 600 }}>
                 <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=1000&fit=crop&auto=format&q=80" alt="Restaurant interior" loading="lazy" />
@@ -617,7 +617,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 md:gap-10 mt-10">
+              <div className="flex items-center gap-3 md:gap-10 mt-10">
                 <div className="story-stat">
                   <div className="number" style={{ fontSize: '2rem' }}>12</div>
                   <div className="label">Years</div>
@@ -654,7 +654,7 @@ export default function Home() {
             <div className="deco-line-center mx-auto mt-5"></div>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-stretch gap-10 lg:gap-16">
+          <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-16">
             <div className="lg:w-1/2 reveal-left">
               <div className="relative h-full min-h-[360px] md:min-h-[480px] rounded-3xl overflow-hidden" style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.5)' }}>
                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=900&fit=crop&auto=format&q=80" alt="Featured dish" className="w-full h-full object-cover" style={{ position: 'absolute', inset: 0 }} loading="lazy" />
@@ -784,7 +784,9 @@ export default function Home() {
           </div>
         </div>
 
-        <ZoomParallax images={zoomImages} />
+        <div className="hidden md:block">
+          <ZoomParallax images={zoomImages} />
+        </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-24 md:pb-32"></div>
       </section>
@@ -902,7 +904,7 @@ export default function Home() {
             <div className="deco-line-center mx-auto mt-5"></div>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-stretch gap-10 lg:gap-16">
+          <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-16">
             <div className="lg:w-1/2 reveal-left">
               <div className="reservation-side-image relative">
                 <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=1000&fit=crop&auto=format&q=80" alt="Dining atmosphere" loading="lazy" />
@@ -928,15 +930,15 @@ export default function Home() {
             <div className="lg:w-1/2 reveal-right flex items-center">
               <div className="reservation-card w-full">
                 <form onSubmit={(e) => { e.preventDefault(); alert('Thank you! Your reservation request has been received. We will confirm within 24 hours.') }}>
-                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
                     <input type="text" className="input-field" placeholder="First name" required />
                     <input type="text" className="input-field" placeholder="Last name" required />
                   </div>
-                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
                     <input type="email" className="input-field" placeholder="Email address" required />
                     <input type="tel" className="input-field" placeholder="Phone number" />
                   </div>
-                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
                     <select className="input-field" required defaultValue="">
                       <option value="" disabled>Number of guests</option>
                       {[1,2,3,4,5,6,8].map(n => <option key={n} value={n}>{n} {n === 1 ? 'Guest' : 'Guests'}</option>)}
@@ -972,7 +974,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12">
             <div className="col-span-2 md:col-span-2 lg:col-span-2 reveal" style={{ transitionDelay: '0.05s' }}>
-              <div className="footer-brand gentle-pulse" style={{ fontSize: '2.2rem' }}>Aurelius</div>
+              <div className="footer-brand gentle-pulse" style={{ fontSize: 'clamp(1.6rem, 5vw, 2.2rem)' }}>Aurelius</div>
               <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(245, 239, 230, 0.5)', maxWidth: 240 }}>
                 An intimate fine dining experience at the intersection of tradition and innovation.
               </p>

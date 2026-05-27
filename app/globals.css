@@ -85,8 +85,8 @@
   }
 
   .hero-img-rotate {
-    width: clamp(280px, 38vw, 500px);
-    height: clamp(280px, 38vw, 500px);
+    width: clamp(240px, 38vw, 500px);
+    height: clamp(240px, 38vw, 500px);
     border-radius: 50%;
     overflow: hidden;
     animation: plateSpin 48s linear infinite;
@@ -902,7 +902,7 @@
   animation-play-state: paused;
 }
 .quotes-track .testimonial-card {
-  width: 340px;
+  width: min(340px, 80vw);
   flex-shrink: 0;
 }
 
@@ -916,7 +916,7 @@
   animation-play-state: paused;
 }
 .showcase-track .showcase-card {
-  width: 360px;
+  width: min(360px, 85vw);
   flex-shrink: 0;
 }
 
@@ -934,7 +934,7 @@
   display: none;
 }
 .signatures-track .horizontal-card {
-  width: 280px;
+  width: min(280px, 75vw);
   flex-shrink: 0;
 }
 
@@ -968,6 +968,24 @@
   }
   .horizontal-card-content .dish-name {
     font-size: 1.2rem;
+  }
+  .story-stat {
+    padding: 12px;
+  }
+  .story-stat .number {
+    font-size: 1.5rem;
+  }
+  .testimonial-card {
+    padding: 24px 20px;
+  }
+  .testimonial-card .quote-icon {
+    font-size: 2rem;
+  }
+  .horizontal-card-content {
+    padding: 20px;
+  }
+  .reservation-card {
+    padding: 28px;
   }
 }
 
