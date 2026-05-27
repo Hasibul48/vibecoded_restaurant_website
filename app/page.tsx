@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Lenis from 'lenis'
 import { ZoomParallax } from "@/components/ui/zoom-parallax"
 import { cn } from "@/lib/utils"
 
@@ -53,6 +54,28 @@ export default function Home() {
     if (!gsap || !ScrollTrigger) return
 
     gsap.registerPlugin(ScrollTrigger)
+
+    // Lenis smooth scroll
+    const lenis = new Lenis({
+      duration: 1.6,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    })
+
+    let lastSTUpdate = 0
+    lenis.on('scroll', () => {
+      const now = performance.now()
+      if (now - lastSTUpdate > 50) {
+        lastSTUpdate = now
+        ScrollTrigger.update()
+      }
+    })
+
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
 
     const spring = [0.16, 1, 0.3, 1]
 
@@ -405,6 +428,7 @@ export default function Home() {
     window.addEventListener('resize', () => ScrollTrigger.refresh())
 
     return () => {
+      lenis.destroy()
       ScrollTrigger.getAll().forEach((st: any) => st.kill())
     }
   }, [])
@@ -1009,7 +1033,14 @@ export default function Home() {
           <div className="footer-divider"></div>
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-            <p className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.25)' }}>&copy; 2024 Aurelius Fine Dining. All rights reserved.</p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.4)' }}>&copy; 2024 Aurelius Fine Dining. All rights reserved.</p>
+              <span className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.3)' }}>&middot;</span>
+              <span className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.35)' }}>Powered by</span>
+              <a href="https://flowup-bd.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center opacity-60 hover:opacity-100 transition-opacity">
+                <img src="/flow-up.png" alt="FlowUp" style={{ height: 26, width: 'auto' }} />
+              </a>
+            </div>
             <div className="flex gap-6">
               <a href="#" className="footer-link">Privacy</a>
               <a href="#" className="footer-link">Terms</a>
