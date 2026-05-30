@@ -1,19 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
-import { ZoomParallax } from "@/components/ui/zoom-parallax"
-import { cn } from "@/lib/utils"
-
-const zoomImages = [
-  { src: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Salad' },
-  { src: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Service' },
-  { src: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Ambiance' },
-  { src: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Ingredients' },
-  { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Memory' },
-  { src: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Craft' },
-  { src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=800&fit=crop&auto=format&q=80', alt: 'Pizza' },
-]
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 
 const testimonials = [
   { quote: "The most transcendent dining experience I have had in a decade. Bellini's truffle risotto is nothing short of a masterpiece.", name: "James Thornton", source: "The New York Times", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&q=60" },
@@ -39,10 +29,8 @@ const signatures = [
 ]
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const progressRef = useRef<HTMLDivElement>(null)
   const followerRef = useRef<HTMLDivElement>(null)
-  const navRef = useRef<HTMLElement>(null)
   const sigRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
 
@@ -215,23 +203,6 @@ export default function Home() {
       })
     }, { threshold: 0.25, rootMargin: '-80px 0px -20% 0px' })
     sections.forEach((s) => sectionObserver.observe(s.el))
-
-    // Navbar scroll effect
-    const nav = navRef.current
-    if (nav) {
-      const handleScroll = () => {
-        if (window.pageYOffset > 100) {
-          nav.style.background = 'rgba(11, 11, 11, 0.75)'
-          nav.style.backdropFilter = 'blur(30px)'
-          nav.style.borderBottom = '1px solid rgba(255, 255, 255, 0.03)'
-        } else {
-          nav.style.background = 'transparent'
-          nav.style.backdropFilter = 'none'
-          nav.style.borderBottom = 'none'
-        }
-      }
-      window.addEventListener('scroll', handleScroll)
-    }
 
     // Scroll progress bar
     const progress = progressRef.current
@@ -458,10 +429,8 @@ export default function Home() {
     }
   }, [])
 
-  const closeMobileMenu = () => setMenuOpen(false)
-
   return (
-    <main>
+    <main className="overflow-x-hidden">
       <div className="grain-overlay"></div>
 
       {/* LOADER */}
@@ -475,41 +444,7 @@ export default function Home() {
       {/* MOUSE FOLLOWER */}
       <div className="mouse-follower" ref={followerRef}></div>
 
-      {/* NAV */}
-      <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5" style={{ transition: 'background 0.4s ease, backdrop-filter 0.4s ease' }}>
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <a href="#" className="font-script text-2xl md:text-3xl transition-colors" style={{ color: 'var(--gold)' }}>Aurelius</a>
-          <div className="hidden md:flex items-center gap-10">
-            <a href="#story" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="story">Story</a>
-            <a href="#menu" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="menu">Menu</a>
-            <a href="#testimonials" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="testimonials">Testimonials</a>
-            <a href="#signatures" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="signatures">Popular Items</a>
-            <a href="#awards" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="awards">Awards</a>
-            <a href="#reservation" className="nav-link text-sm tracking-widest uppercase transition-colors" style={{ color: 'rgba(245, 239, 230, 0.7)', letterSpacing: '2px' }} data-section="reservation">Contact</a>
-          </div>
-          <button className="md:hidden p-2" style={{ color: 'var(--cream)' }} onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M3 6h18M3 12h18M3 18h18"/>
-            </svg>
-          </button>
-        </div>
-      </nav>
-
-      {/* MOBILE MENU */}
-      <div
-        className={cn(
-          "fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 transition-all duration-500",
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-        style={{ background: 'rgba(0,0,0,0.95)', backdropFilter: 'blur(24px)' }}
-      >
-        <a href="#story" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Story</a>
-        <a href="#menu" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Menu</a>
-        <a href="#testimonials" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Testimonials</a>
-        <a href="#signatures" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Popular Items</a>
-        <a href="#awards" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Awards</a>
-        <a href="#reservation" className="font-serif text-2xl md:text-3xl transition-colors" style={{ color: 'var(--cream)' }} onClick={closeMobileMenu}>Contact</a>
-      </div>
+      <Navbar variant="home" />
 
       {/* HERO SECTION */}
       <section ref={heroRef} className="relative min-h-screen flex items-center bg-gradient-shift" style={{ background: 'radial-gradient(ellipse 100% 70% at 50% 20%, #10402e 0%, #092418 50%, #070707 100%)' }}>
@@ -549,7 +484,7 @@ export default function Home() {
               </div>
 
               {/* Chef Profile */}
-              <div className="chef-profile mt-12 md:mt-16 flex items-center gap-4">
+              <div className="chef-profile mt-12 md:mt-16 flex flex-wrap items-center gap-4">
                 <div className="relative" style={{ width: 48, height: 48 }}>
                   <div className="chef-avatar">
                     <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=100&h=100&fit=crop&crop=face&q=80" alt="Chef" loading="lazy" />
@@ -585,16 +520,16 @@ export default function Home() {
                 <div className="particle particle-spice" style={{ top: '-3%', left: '15%', animationDelay: '1s', animationDuration: '7.5s', background: '#654321', width: 3, height: 3 }}></div>
                 <div className="particle particle-gold" style={{ bottom: '0%', left: '5%', animationDelay: '2.2s', animationDuration: '12s' }}></div>
 
-                <div className="food-item" style={{ width: 'clamp(52px, 7vw, 78px)', top: '7%', left: '2%', animationDelay: '0s', animationDuration: '6s' }}>
+                <div className="hidden sm:block food-item" style={{ width: 'clamp(52px, 7vw, 78px)', top: '7%', left: '2%', animationDelay: '0s', animationDuration: '6s' }}>
                   <img src="/food-chicken.png" alt="" className="food-item-img" />
                 </div>
-                <div className="food-item" style={{ width: 'clamp(58px, 8vw, 90px)', bottom: '-4%', left: '-2%', animationDelay: '1.5s', animationDuration: '7.5s' }}>
+                <div className="hidden sm:block food-item" style={{ width: 'clamp(58px, 8vw, 90px)', bottom: '-4%', left: '-2%', animationDelay: '1.5s', animationDuration: '7.5s' }}>
                   <img src="/food-bowl.png" alt="" className="food-item-img" />
                 </div>
-                <div className="food-item" style={{ width: 'clamp(55px, 7vw, 80px)', bottom: '-8%', right: '8%', animationDelay: '2.8s', animationDuration: '5.5s' }}>
+                <div className="hidden sm:block food-item" style={{ width: 'clamp(55px, 7vw, 80px)', bottom: '-8%', right: '8%', animationDelay: '2.8s', animationDuration: '5.5s' }}>
                   <img src="/food-egg.png" alt="" className="food-item-img" />
                 </div>
-                <div className="food-item" style={{ width: 'clamp(62px, 8.5vw, 95px)', top: '-5%', right: '12%', animationDelay: '0.8s', animationDuration: '8s' }}>
+                <div className="hidden sm:block food-item" style={{ width: 'clamp(62px, 8.5vw, 95px)', top: '-5%', right: '12%', animationDelay: '0.8s', animationDuration: '8s' }}>
                   <img src="/food-burger.png" alt="" className="food-item-img" />
                 </div>
 
@@ -655,7 +590,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 md:gap-10 mt-10">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-6 md:gap-10 mt-10">
                 <div className="story-stat">
                   <div className="number" style={{ fontSize: '2rem' }}>12</div>
                   <div className="label">Years</div>
@@ -756,7 +691,7 @@ export default function Home() {
 
                 <div className="mt-6 pt-6 flex items-center justify-between" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
                   <span className="text-sm" style={{ color: 'rgba(245, 239, 230, 0.3)' }}>Wine pairing available +$95</span>
-                  <button className="btn-glass text-xs py-2 px-5">Full Menu</button>
+                  <a href="/menu" className="btn-glass text-xs py-2 px-5 inline-flex items-center gap-2">Full Menu</a>
                 </div>
               </div>
             </div>
@@ -807,29 +742,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ZOOM PARALLAX SECTION */}
-      <section id="zoom-parallax" className="relative" style={{ background: 'radial-gradient(ellipse 85% 55% at 50% 30%, #0a3325 0%, #0a1a14 50%, #070707 100%)' }}>
-        <div className="light-spot" style={{ width: 500, height: 500, top: '20%', right: '-10%', background: 'radial-gradient(circle, rgba(201,168,98,0.06), transparent)' }}></div>
-        <div className="light-spot" style={{ width: 400, height: 400, bottom: '10%', left: '-8%', background: 'radial-gradient(circle, rgba(16,64,46,0.12), transparent)' }}></div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-24 md:pt-32 pb-0">
-          <div className="text-center mb-16 md:mb-20 reveal">
-            <p className="text-xs tracking-[4px] uppercase mb-4" style={{ color: 'rgba(201, 168, 98, 0.6)', letterSpacing: '5px' }}>The Journey</p>
-            <h2 className="section-heading font-serif text-4xl md:text-5xl lg:text-6xl" style={{ color: 'var(--cream)' }}>
-              <span>The</span> <span style={{ color: 'var(--gold)' }}>Experience</span>
-            </h2>
-            <div className="deco-line-center mx-auto mt-5"></div>
-          </div>
-        </div>
-
-        <div className="hidden md:block">
-          <ZoomParallax images={zoomImages} />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pb-24 md:pb-32"></div>
-      </section>
-
-      {/* SIGNATURES SECTION */}
+{/* SIGNATURES SECTION */}
       <section id="signatures" className="relative py-24 md:py-32 px-6 md:px-12" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 30%, #0a3325 0%, #0a1a14 50%, #070707 100%)' }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="light-spot" style={{ width: 400, height: 400, top: '10%', left: '-10%', background: 'radial-gradient(circle, rgba(201,168,98,0.06), transparent)' }}></div>
@@ -876,7 +789,7 @@ export default function Home() {
             <div className="deco-line-center mx-auto mt-5"></div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 reveal-scale">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 reveal-scale">
             <div className="award-item">
               <div className="award-icon">
                 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
@@ -968,15 +881,15 @@ export default function Home() {
             <div className="lg:w-1/2 reveal-right flex items-center">
               <div className="reservation-card w-full">
                 <form onSubmit={(e) => { e.preventDefault(); alert('Thank you! Your reservation request has been received. We will confirm within 24 hours.') }}>
-                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
                     <input type="text" className="input-field" placeholder="First name" required />
                     <input type="text" className="input-field" placeholder="Last name" required />
                   </div>
-                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
                     <input type="email" className="input-field" placeholder="Email address" required />
                     <input type="tel" className="input-field" placeholder="Phone number" />
                   </div>
-                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                  <div className="input-row mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
                     <select className="input-field" required defaultValue="">
                       <option value="" disabled>Number of guests</option>
                       {[1,2,3,4,5,6,8].map(n => <option key={n} value={n}>{n} {n === 1 ? 'Guest' : 'Guests'}</option>)}
@@ -1007,89 +920,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="relative px-6 md:px-12 pt-20 pb-8" style={{ background: 'linear-gradient(180deg, #0a1f14 0%, #060b08 100%)' }}>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 md:gap-12">
-            <div className="col-span-2 md:col-span-2 lg:col-span-2 reveal" style={{ transitionDelay: '0.05s' }}>
-              <div className="footer-brand gentle-pulse" style={{ fontSize: 'clamp(1.6rem, 5vw, 2.2rem)' }}>Aurelius</div>
-              <p className="text-sm mt-3 leading-relaxed" style={{ color: 'rgba(245, 239, 230, 0.5)', maxWidth: 240 }}>
-                An intimate fine dining experience at the intersection of tradition and innovation.
-              </p>
-              <div className="flex gap-3 mt-6">
-                <a href="#" className="footer-social-ring" aria-label="Instagram">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-                  </svg>
-                </a>
-                <a href="#" className="footer-social-ring" aria-label="X">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 4l11.733 16h4.267l-11.733 -16zM4 20l6.768 -6.768M20 4l-6.768 6.768"/>
-                  </svg>
-                </a>
-                <a href="#" className="footer-social-ring" aria-label="Facebook">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
-                  </svg>
-                </a>
-                <a href="#" className="footer-social-ring" aria-label="YouTube">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="3" ry="3"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <div className="reveal" style={{ transitionDelay: '0.1s' }}>
-              <div className="footer-heading">Navigate</div>
-              <ul className="space-y-3">
-                <li><a href="#story" className="footer-link">Our Story</a></li>
-                <li><a href="#menu" className="footer-link">Menu</a></li>
-                <li><a href="#testimonials" className="footer-link">Testimonials</a></li>
-                <li><a href="#signatures" className="footer-link">Popular Items</a></li>
-                <li><a href="#awards" className="footer-link">Awards</a></li>
-              </ul>
-            </div>
-
-            <div className="reveal" style={{ transitionDelay: '0.15s' }}>
-              <div className="footer-heading">Contact</div>
-              <ul className="space-y-3">
-                <li><span className="footer-link">123 Gourmet Ave, NY</span></li>
-                <li><a href="tel:+12125550189" className="footer-link">+1 (212) 555-0189</a></li>
-                <li><a href="mailto:hello@aurelius.com" className="footer-link">hello@aurelius.com</a></li>
-              </ul>
-            </div>
-
-            <div className="reveal" style={{ transitionDelay: '0.2s' }}>
-              <div className="footer-heading">Hours</div>
-              <ul className="space-y-3">
-                <li><span className="footer-link">Tue–Sun 18:00–23:00</span></li>
-                <li><span className="footer-link">Fri–Sat till 01:00</span></li>
-                <li><span className="footer-link" style={{ color: 'rgba(201, 168, 98, 0.6)' }}>Mon — Closed</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-divider"></div>
-
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <p className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.4)' }}>&copy; 2024 Aurelius Fine Dining. All rights reserved.</p>
-              <span className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.3)' }}>&middot;</span>
-              <span className="text-xs" style={{ color: 'rgba(245, 239, 230, 0.35)' }}>Powered by</span>
-              <a href="https://flowup-bd.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center opacity-60 hover:opacity-100 transition-opacity">
-                <img src="/flow-up.png" alt="FlowUp" style={{ height: 26, width: 'auto' }} />
-              </a>
-            </div>
-            <div className="flex gap-6">
-              <a href="#" className="footer-link">Privacy</a>
-              <a href="#" className="footer-link">Terms</a>
-              <a href="#" className="footer-link">Careers</a>
-              <a href="#" className="footer-link">Accessibility</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }
