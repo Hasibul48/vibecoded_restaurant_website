@@ -742,7 +742,7 @@ export default function Home() {
         </div>
       </section>
 
-{/* SIGNATURES SECTION */}
+      {/* SIGNATURES SECTION */}
       <section id="signatures" className="relative py-24 md:py-32 px-6 md:px-12" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 30%, #0a3325 0%, #0a1a14 50%, #070707 100%)' }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="light-spot" style={{ width: 400, height: 400, top: '10%', left: '-10%', background: 'radial-gradient(circle, rgba(201,168,98,0.06), transparent)' }}></div>

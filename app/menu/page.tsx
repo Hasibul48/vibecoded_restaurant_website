@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Lenis from 'lenis'
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 
@@ -73,6 +74,27 @@ export default function MenuPage() {
 
     gsap.registerPlugin(ScrollTrigger)
 
+    const lenis = new Lenis({
+      duration: 1.6,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    })
+
+    let lastSTUpdate = 0
+    lenis.on('scroll', () => {
+      const now = performance.now()
+      if (now - lastSTUpdate > 50) {
+        lastSTUpdate = now
+        ScrollTrigger.update()
+      }
+    })
+
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+
     const spring = [0.16, 1, 0.3, 1]
 
     gsap.utils.toArray('.reveal-menu').forEach((el: any, i: number) => {
@@ -85,12 +107,13 @@ export default function MenuPage() {
     gsap.from('.menu-hero-text', { opacity: 0, y: 40, duration: 1, ease: spring, delay: 0.3 })
 
     return () => {
+      lenis.destroy()
       ScrollTrigger.getAll().forEach((st: any) => st.kill())
     }
   }, [])
 
   return (
-    <main ref={menuRef} className="min-h-screen" style={{ background: 'radial-gradient(ellipse 100% 60% at 50% 15%, #0f3d2e 0%, #0a1f14 50%, #070707 100%)' }}>
+    <main ref={menuRef} className="min-h-screen overflow-x-hidden" style={{ background: 'radial-gradient(ellipse 100% 60% at 50% 15%, #0f3d2e 0%, #0a1f14 50%, #070707 100%)' }}>
       <div className="grain-overlay"></div>
 
       <Navbar variant="simple" />
